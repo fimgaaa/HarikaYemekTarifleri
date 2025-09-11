@@ -16,7 +16,7 @@ using System.Net.Http.Json;
 public class ApiClient
 {
     private readonly HttpClient _http = new() { BaseAddress = new Uri("https://localhost:7155/") };
-    private string? _token;
+    private string? _token; 
 
     public void SetToken(string? token)
     {

@@ -10,7 +10,7 @@ public partial class RecipeEditViewModel : BaseViewModel
 {
     private readonly IRecipeService _recipes;
     private readonly ICategoryService _cats;
-    private readonly INavigation _nav;
+    private readonly INavigationService _nav;
 
     public ObservableCollection<CategoryDto> Categories { get; } = new();
 
@@ -22,7 +22,7 @@ public partial class RecipeEditViewModel : BaseViewModel
     [ObservableProperty] private DateTime publishDate = DateTime.Today;
     public ObservableCollection<int> SelectedCategoryIds { get; } = new();
 
-    public RecipeEditViewModel(IRecipeService recipes, ICategoryService cats, INavigation nav)
+    public RecipeEditViewModel(IRecipeService recipes, ICategoryService cats, INavigationService nav)
     { _recipes = recipes; _cats = cats; _nav = nav; }
 
     [RelayCommand]

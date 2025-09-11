@@ -253,7 +253,8 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
 });
 
 // PUT /api/recipes/{id}
-recipes.MapPut("/{id:int}", async (AppDbContext db, int id,  RecipeUpdateDto dto) =>
+/*recipes.MapPut("/{id:int}", async (AppDbContext db, int id,  RecipeUpdateDto dto)*/
+recipes.MapPut("/{recipeId:int}", async (AppDbContext db, int recipeId, RecipeUpdateDto dto) =>
 {
     var r = await db.Recipes.Include(x => x.RecipeCategories)
                             .FirstOrDefaultAsync(x => x.Id == id);
