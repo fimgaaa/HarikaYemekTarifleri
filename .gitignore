@@ -1,0 +1,12 @@
+# Visual Studio IDE cache
+.vs/
+
+# Build çýktýlarý
+bin/
+obj/
+
+# Kullanýcýya özel ayarlar
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
