@@ -257,7 +257,7 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
 recipes.MapPut("/{recipeId:int}", async (AppDbContext db, int recipeId, RecipeUpdateDto dto) =>
 {
     var r = await db.Recipes.Include(x => x.RecipeCategories)
-                            .FirstOrDefaultAsync(x => x.Id == id);
+                            .FirstOrDefaultAsync(x => x.Id == recipeId);
     if (r is null) return Results.NotFound();
 
     r.Title = dto.Title;
