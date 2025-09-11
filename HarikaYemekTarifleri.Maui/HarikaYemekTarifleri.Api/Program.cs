@@ -226,7 +226,7 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
 
 // POST /api/recipes
 //recipes.MapPost("/", async (AppDbContext db, ClaimsPrincipal user, RecipeCreateDto dto) =>
-recipes.MapPost("/", async ([FromBody] RecipeCreateDto dto, AppDbContext db, ClaimsPrincipal user) =>
+recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipal user) =>
 {
     if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
         return Results.BadRequest("Başlık ve içerik boş olamaz.");
