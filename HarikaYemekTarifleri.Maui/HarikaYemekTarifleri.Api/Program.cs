@@ -1,4 +1,4 @@
-//var builder = WebApplication.CreateBuilder(args);
+ï»¿//var builder = WebApplication.CreateBuilder(args);
 
 //// Add services to the container.
 
@@ -38,12 +38,12 @@ using HarikaYemekTarifleri.Api.Models;  // AppUser, Recipe, Category, Comment, R
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DbContext + HttpContextAccessor (audit için gerekli)
+// DbContext + HttpContextAccessor (audit iÃ§in gerekli)
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
-// JWT ayarlarý
+// JWT ayarlarÄ±
 var jwtSection = builder.Configuration.GetSection("Jwt");
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));
 
@@ -73,7 +73,7 @@ builder.Services.AddSwaggerGen(c =>
     var securityScheme = new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description = "JWT Bearer þemasý. Örn: Bearer {token}",
+        Description = "JWT Bearer ÅŸemasÄ±. Ã–rn: Bearer {token}",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
@@ -101,7 +101,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 /* ============================
-   AUTH ENDPOINTLERÝ (/auth)
+   AUTH ENDPOINTLERÄ° (/auth)
    ============================ */
 var auth = app.MapGroup("/auth");
 
@@ -109,10 +109,10 @@ var auth = app.MapGroup("/auth");
 auth.MapPost("/register", async (AppDbContext db, AppUser dto) =>
 {
     if (string.IsNullOrWhiteSpace(dto.UserName) || string.IsNullOrWhiteSpace(dto.PasswordHash))
-        return Results.BadRequest("Kullanýcý adý/parola boþ olamaz");
+        return Results.BadRequest("KullanÄ±cÄ± adÄ±/parola boÅŸ olamaz");
 
     if (await db.Users.AnyAsync(u => u.UserName == dto.UserName))
-        return Results.BadRequest("Kullanýcý zaten var");
+        return Results.BadRequest("KullanÄ±cÄ± zaten var");
 
     var user = new AppUser
     {
@@ -124,7 +124,7 @@ auth.MapPost("/register", async (AppDbContext db, AppUser dto) =>
     return Results.Ok();
 });
 
-// Login – Ýstemci { userName, password } gönderir; burada PasswordHash alanýný password olarak kullanýyoruz
+// Login â€“ Ä°stemci { userName, password } gÃ¶nderir; burada PasswordHash alanÄ±nÄ± password olarak kullanÄ±yoruz
 auth.MapPost("/login", async (AppDbContext db, AppUser dto) =>
 {
     var user = await db.Users.FirstOrDefaultAsync(u => u.UserName == dto.UserName);
@@ -150,7 +150,7 @@ auth.MapPost("/login", async (AppDbContext db, AppUser dto) =>
     return Results.Ok(new { token = tokenString });
 });
 
-// Þifre deðiþtir
+// Åžifre deÄŸiÅŸtir
 auth.MapPost("/change-password", async (AppDbContext db, ClaimsPrincipal user, string oldPassword, string newPassword) =>
 {
     var name = user.Identity?.Name;
@@ -158,7 +158,7 @@ auth.MapPost("/change-password", async (AppDbContext db, ClaimsPrincipal user, s
     if (entity is null) return Results.Unauthorized();
 
     if (!BCrypt.Net.BCrypt.Verify(oldPassword, entity.PasswordHash))
-        return Results.BadRequest("Eski þifre yanlýþ.");
+        return Results.BadRequest("Eski ÅŸifre yanlÄ±ÅŸ.");
 
     entity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
     await db.SaveChangesAsync();
@@ -166,7 +166,7 @@ auth.MapPost("/change-password", async (AppDbContext db, ClaimsPrincipal user, s
 }).RequireAuthorization();
 
 /* =======================================
-   TARÝF / KATEGORÝ / YORUM ENDPOINTLERÝ
+   TARÄ°F / KATEGORÄ° / YORUM ENDPOINTLERÄ°
    ======================================= */
 
 // Tarifler
@@ -225,10 +225,11 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
 });
 
 // POST /api/recipes
-recipes.MapPost("/", async (AppDbContext db, ClaimsPrincipal user, RecipeCreateDto dto) =>
+//recipes.MapPost("/", async (AppDbContext db, ClaimsPrincipal user, RecipeCreateDto dto) =>
+recipes.MapPost("/", async ([FromBody] RecipeCreateDto dto, AppDbContext db, ClaimsPrincipal user) =>
 {
     if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
-        return Results.BadRequest("Baþlýk ve içerik boþ olamaz.");
+        return Results.BadRequest("BaÅŸlÄ±k ve iÃ§erik boÅŸ olamaz.");
 
     var uid = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -277,7 +278,7 @@ recipes.MapPut("/{id:int}", async (AppDbContext db, int id,  RecipeUpdateDto dto
 //recipes.MapPost("/", async (AppDbContext db, ClaimsPrincipal user, Recipe dto, int[] categoryIds) =>
 //{
 //    if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
-//        return Results.BadRequest("Baþlýk ve içerik boþ olamaz.");
+//        return Results.BadRequest("BaÅŸlÄ±k ve iÃ§erik boÅŸ olamaz.");
 
 //    var uid = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
 //    dto.UserId = uid;
