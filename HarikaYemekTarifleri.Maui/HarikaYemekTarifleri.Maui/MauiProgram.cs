@@ -73,6 +73,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IRecipeService, RecipeService>();
         builder.Services.AddSingleton<ICategoryService, CategoryService>();
         builder.Services.AddSingleton<ICommentService, CommentService>();
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
 
         // ViewModels
         builder.Services.AddSingleton<LoginViewModel>();

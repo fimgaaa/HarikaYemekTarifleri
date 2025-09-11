@@ -13,7 +13,7 @@ public partial class RecipesViewModel : BaseViewModel
 {
     private readonly IRecipeService _recipes;
     private readonly ICategoryService _cats;
-    private readonly INavigation _nav;
+    private readonly INavigationService _navigation;
 
     public ObservableCollection<RecipeListItem> Items { get; } = new();
     public ObservableCollection<CategoryDto> Categories { get; } = new();
@@ -31,9 +31,9 @@ public partial class RecipesViewModel : BaseViewModel
     [ObservableProperty] private DateTime? fromDate;
     [ObservableProperty] private TimeSpan? maxPrep;
 
-    public RecipesViewModel(IRecipeService recipes, ICategoryService cats, INavigation nav)
+    public RecipesViewModel(IRecipeService recipes, ICategoryService cats, INavigationService navigation)
     {
-        _recipes = recipes; _cats = cats; _nav = nav;
+        _recipes = recipes; _cats = cats; _navigation = navigation;
     }
 
     [RelayCommand]
@@ -57,7 +57,7 @@ public partial class RecipesViewModel : BaseViewModel
     private async Task NewRecipe()
     {
         var page = ServiceHelper.Get<Pages.RecipeEditPage>();
-        await Application.Current!.MainPage!.Navigation.PushAsync(page);
+        await _navigation.PushAsync(page);
     }
 
     [RelayCommand]
