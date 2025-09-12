@@ -32,4 +32,11 @@ public partial class LoginViewModel : BaseViewModel
             await Application.Current!.MainPage!.Navigation.PushAsync(page);
         });
     }
+
+    [RelayCommand]
+    private async Task NavigateToRegister()
+    {
+        var page = ServiceHelper.Get<RegisterPage>();
+        await Application.Current!.MainPage!.Navigation.PushAsync(page);
+    }
 }

@@ -81,12 +81,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<RecipesViewModel>();
         builder.Services.AddSingleton<RecipeEditViewModel>();
         builder.Services.AddSingleton<ProfileViewModel>();
+        builder.Services.AddSingleton<RegisterViewModel>();
 
         // Pages
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<RecipesPage>();
         builder.Services.AddSingleton<RecipeEditPage>();
         builder.Services.AddSingleton<ProfilePage>();
+        builder.Services.AddSingleton<RegisterPage>();
 
         var app = builder.Build();
 

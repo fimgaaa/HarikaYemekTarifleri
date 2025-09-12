@@ -17,6 +17,7 @@ using System.Net.Http.Json;
 public interface IAuthService
 {
     Task<bool> LoginAsync(string userName, string password);
+    Task<bool> RegisterAsync(string userName, string password);
     Task LogoutAsync();
     Task<bool> ChangePasswordAsync(string oldPwd, string newPwd);
 }
