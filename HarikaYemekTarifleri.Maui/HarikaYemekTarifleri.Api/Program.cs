@@ -32,11 +32,18 @@ using System.Text;
 using BCrypt.Net;
 using HarikaYemekTarifleri.Api.DTOs;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 using HarikaYemekTarifleri.Api.Data;    // AppDbContext
 using HarikaYemekTarifleri.Api.Models;  // AppUser, Recipe, Category, Comment, RecipeCategory
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 
 // DbContext + HttpContextAccessor (audit için gerekli)
 builder.Services.AddHttpContextAccessor();
@@ -249,7 +256,18 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
 
     db.Recipes.Add(entity);
     await db.SaveChangesAsync();
-    return Results.Created($"/api/recipes/{entity.Id}", entity);
+    //return Results.Created($"/api/recipes/{entity.Id}", entity);
+    return Results.Created($"/api/recipes/{entity.Id}",
+    new
+    {
+        entity.Id,
+        entity.Title,
+        entity.IsVegetarian,
+        entity.Difficulty,
+        entity.PrepTime,
+        entity.PublishDate,
+        CategoryIds = dto.CategoryIds
+    });
 });
 
 // PUT /api/recipes/{id}
