@@ -6,10 +6,24 @@
     <VerticalStackLayout Padding="24" Spacing="12">
         <!--<Entry Placeholder="Kullanıcı adı" Text="{Binding UserName}" />
         <Entry Placeholder="E-posta" Text="{Binding Email}" />
-        <Button Text="Kaydet" Command="{Binding SaveCommand}" />-->
+        <Button Text="Kaydet" Command="{Binding SaveCommand}" />--><!--
 		<Entry Placeholder="Kullanıcı adı" Text="{Binding Path=UserName}" />
 		<Entry Placeholder="E-posta" Text="{Binding Path=Email}" />
-		<Button Text="Kaydet" Command="{Binding Path=SaveCommand}" />
+		<Button Text="Kaydet" Command="{Binding Path=SaveCommand}" />-->
+		<Image Source="{Binding PhotoUrl}" HeightRequest="120" WidthRequest="120" />
+		<Entry Placeholder="Kullanıcı adı" Text="{Binding UserName}" />
+		<Entry Placeholder="E-posta" Text="{Binding Email}" />
+		<Button Text="Kaydet" Command="{Binding SaveCommand}" />
+		<CollectionView ItemsSource="{Binding Recipes}">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Frame Padding="8" Margin="4" HasShadow="True">
+						<Label Text="{Binding Title}" />
+					</Frame>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+		<Button Text="Yeni Tarif Ekle" Command="{Binding AddRecipeCommand}" />
         <Label Text="{Binding Error}" TextColor="Red" />
     </VerticalStackLayout>
 </ContentPage>

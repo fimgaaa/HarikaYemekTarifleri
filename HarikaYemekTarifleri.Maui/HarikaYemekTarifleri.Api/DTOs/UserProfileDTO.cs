@@ -1,6 +1,6 @@
-﻿namespace HarikaYemekTarifleri.Maui.Models;
+﻿namespace HarikaYemekTarifleri.Api.DTOs;
 
-public class UserProfile
+public class UserProfileDto
 {
     public string? UserName { get; set; }
     public string? Email { get; set; }

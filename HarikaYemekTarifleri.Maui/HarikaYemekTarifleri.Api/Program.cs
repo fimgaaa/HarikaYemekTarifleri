@@ -172,6 +172,37 @@ auth.MapPost("/change-password", async (AppDbContext db, ClaimsPrincipal user, s
     return Results.Ok();
 }).RequireAuthorization();
 
+/* ======================
+   KULLANICI PROFİLİ
+   ====================== */
+var users = app.MapGroup("/api/users").RequireAuthorization();
+
+users.MapGet("/me", async (AppDbContext db, ClaimsPrincipal u) =>
+{
+    var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    var entity = await db.Users.FindAsync(id);
+    if (entity is null) return Results.NotFound();
+    var dto = new UserProfileDto
+    {
+        UserName = entity.UserName,
+        Email = entity.Email,
+        PhotoUrl = entity.PhotoUrl
+    };
+    return Results.Ok(dto);
+});
+
+users.MapPut("/me", async (AppDbContext db, ClaimsPrincipal u, UserProfileDto dto) =>
+{
+    var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    var entity = await db.Users.FindAsync(id);
+    if (entity is null) return Results.NotFound();
+    entity.UserName = dto.UserName ?? entity.UserName;
+    entity.Email = dto.Email;
+    entity.PhotoUrl = dto.PhotoUrl;
+    await db.SaveChangesAsync();
+    return Results.NoContent();
+});
+
 /* =======================================
    TARİF / KATEGORİ / YORUM ENDPOINTLERİ
    ======================================= */
@@ -219,6 +250,27 @@ recipes.MapGet("/", async (AppDbContext db, string? q, int? categoryId, bool? ve
         })
         .ToListAsync();
 
+    return Results.Ok(list);
+});
+
+recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
+{
+    var uid = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    var list = await db.Recipes
+        .Where(r => r.UserId == uid)
+        .OrderByDescending(r => r.PublishDate)
+        .Select(r => new
+        {
+            r.Id,
+            r.Title,
+            r.IsVegetarian,
+            r.Difficulty,
+            r.PrepTime,
+            r.PublishDate,
+            Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
+            CommentsCount = r.Comments.Count
+        })
+        .ToListAsync();
     return Results.Ok(list);
 });
 

@@ -24,7 +24,12 @@ public class RecipeService : IRecipeService
         res.EnsureSuccessStatusCode();
         return await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
     }
-
+    public async Task<IEnumerable<RecipeListItem>> GetMineAsync()
+    {
+        var res = await _api.GetAsync("/api/recipes/mine");
+        res.EnsureSuccessStatusCode();
+        return await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
+    }
     public async Task<RecipeDetail?> GetAsync(int id)
     {
         var res = await _api.GetAsync($"/api/recipes/{id}");
