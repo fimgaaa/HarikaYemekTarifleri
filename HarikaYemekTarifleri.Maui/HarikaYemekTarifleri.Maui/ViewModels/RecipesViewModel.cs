@@ -4,6 +4,8 @@ using HarikaYemekTarifleri.Maui.Helpers;
 using HarikaYemekTarifleri.Maui.Models;
 using HarikaYemekTarifleri.Maui.Services;
 using System.Collections.ObjectModel;
+using HarikaYemekTarifleri.Maui.Pages;
+using Microsoft.Maui.Controls;
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
 
@@ -14,6 +16,7 @@ public partial class RecipesViewModel : BaseViewModel
     private readonly IRecipeService _recipes;
     private readonly ICategoryService _cats;
     private readonly INavigationService _navigation;
+    private readonly IAuthService _auth;
 
     public ObservableCollection<RecipeListItem> Items { get; } = new();
     public ObservableCollection<CategoryDto> Categories { get; } = new();
@@ -31,9 +34,11 @@ public partial class RecipesViewModel : BaseViewModel
     [ObservableProperty] private DateTime? fromDate;
     [ObservableProperty] private TimeSpan? maxPrep;
 
-    public RecipesViewModel(IRecipeService recipes, ICategoryService cats, INavigationService navigation)
+    //public RecipesViewModel(IRecipeService recipes, ICategoryService cats, INavigationService navigation)
+    public RecipesViewModel(IRecipeService recipes, ICategoryService cats, INavigationService navigation, IAuthService auth)
     {
-        _recipes = recipes; _cats = cats; _navigation = navigation;
+        //_recipes = recipes; _cats = cats; _navigation = navigation;
+        _recipes = recipes; _cats = cats; _navigation = navigation; _auth = auth;
     }
 
     [RelayCommand]
@@ -61,12 +66,44 @@ public partial class RecipesViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task Profile()
+    {
+        var page = ServiceHelper.Get<ProfilePage>();
+        await _navigation.PushAsync(page);
+    }
+
+    [RelayCommand]
     private async Task Delete(RecipeListItem item)
     {
         await Guard(async () =>
         {
             var ok = await _recipes.DeleteAsync(item.Id);
             if (ok) Items.Remove(item);
+        });
+    }
+
+    [RelayCommand]
+    private async Task Logout()
+    {
+        await Guard(async () =>
+        {
+            await _auth.LogoutAsync();
+            await Application.Current!.MainPage!.DisplayAlert("Başarılı", "Çıkış yapıldı", "Tamam");
+            await Application.Current!.MainPage!.Navigation.PopToRootAsync();
+        });
+    }
+
+    [RelayCommand]
+    private async Task ChangePassword()
+    {
+        await Guard(async () =>
+        {
+            var oldPwd = await Application.Current!.MainPage!.DisplayPromptAsync("Şifre Değiştir", "Mevcut şifre", "Tamam", "İptal", "", -1, true);
+            if (oldPwd is null) return;
+            var newPwd = await Application.Current!.MainPage!.DisplayPromptAsync("Şifre Değiştir", "Yeni şifre", "Tamam", "İptal", "", -1, true);
+            if (newPwd is null) return;
+            var ok = await _auth.ChangePasswordAsync(oldPwd, newPwd);
+            await Application.Current!.MainPage!.DisplayAlert(ok ? "Başarılı" : "Başarısız", ok ? "Şifre değiştirildi" : "Şifre değiştirilemedi", "Tamam");
         });
     }
 }

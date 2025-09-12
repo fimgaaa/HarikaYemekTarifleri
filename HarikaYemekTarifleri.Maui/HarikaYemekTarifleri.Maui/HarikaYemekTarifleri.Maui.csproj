@@ -70,9 +70,16 @@
 	  <MauiXaml Update="Pages\RecipeEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\RecipesPage.xaml">
+	  <!--<MauiXaml Update="Pages\RecipesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
+	</ItemGroup>-->
+	<MauiXaml Update="Pages\RecipesPage.xaml">
+		<Generator>MSBuild:Compile</Generator>
+	</MauiXaml>
+	<MauiXaml Update="Pages\ProfilePage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+	</MauiXaml>
+</ItemGroup>
 
 </Project>
