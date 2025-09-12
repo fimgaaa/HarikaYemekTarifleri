@@ -21,9 +21,9 @@ public class AuthService : IAuthService
     private readonly ApiClient _api;
     public AuthService(ApiClient api) => _api = api;
 
-    public async Task<bool> RegisterAsync(string userName, string password)
+    public async Task<bool> RegisterAsync(string userName, string password, string email)
     {
-        var res = await _api.PostAsync("/auth/register", new { UserName = userName, PasswordHash = password });
+        var res = await _api.PostAsync("/auth/register", new { UserName = userName, PasswordHash = password, Email=email });
         return res.IsSuccessStatusCode;
     }
 

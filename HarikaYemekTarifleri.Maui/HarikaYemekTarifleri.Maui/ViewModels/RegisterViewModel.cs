@@ -28,7 +28,7 @@ public partial class RegisterViewModel : BaseViewModel
             if (Password != ConfirmPassword)
                 throw new Exception("Şifreler uyuşmuyor.");
 
-            var ok = await _auth.RegisterAsync(UserName, Password);
+            var ok = await _auth.RegisterAsync(UserName, Password, Email);
             if (!ok) throw new Exception("Kayıt başarısız.");
 
             await Application.Current!.MainPage!.Navigation.PopAsync();

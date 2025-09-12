@@ -124,7 +124,10 @@ auth.MapPost("/register", async (AppDbContext db, AppUser dto) =>
     var user = new AppUser
     {
         UserName = dto.UserName,
-        PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash)
+        //PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash)
+        PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash),
+        Email = dto.Email,
+        PhotoUrl = dto.PhotoUrl
     };
     db.Users.Add(user);
     await db.SaveChangesAsync();
