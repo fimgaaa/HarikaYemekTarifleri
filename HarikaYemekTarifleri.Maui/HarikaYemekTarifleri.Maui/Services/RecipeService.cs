@@ -9,14 +9,14 @@ public class RecipeService : IRecipeService
     public RecipeService(ApiClient api) => _api = api;
 
     public async Task<IEnumerable<RecipeListItem>> SearchAsync(string? q, int? categoryId, bool? vegetarian,
-        Difficulty? difficulty, DateTime? fromDate, TimeSpan? maxPrep)
+        Difficulty? difficulty, TimeSpan? maxPrep)
     {
         var qs = new List<string>();
         if (!string.IsNullOrWhiteSpace(q)) qs.Add($"q={Uri.EscapeDataString(q)}");
         if (categoryId.HasValue) qs.Add($"categoryId={categoryId.Value}");
         if (vegetarian.HasValue) qs.Add($"vegetarian={vegetarian.Value.ToString().ToLower()}");
         if (difficulty.HasValue) qs.Add($"difficulty={(int)difficulty.Value}");
-        if (fromDate.HasValue) qs.Add($"fromDate={fromDate.Value:yyyy-MM-dd}");
+        //if (fromDate.HasValue) qs.Add($"fromDate={fromDate.Value:yyyy-MM-dd}");
         if (maxPrep.HasValue) qs.Add($"maxPrep={maxPrep.Value}");
         var url = "/api/recipes" + (qs.Count > 0 ? "?" + string.Join("&", qs) : "");
 

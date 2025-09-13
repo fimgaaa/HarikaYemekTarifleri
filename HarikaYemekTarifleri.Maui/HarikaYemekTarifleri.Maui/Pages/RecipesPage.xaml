@@ -29,16 +29,19 @@
 						ItemDisplayBinding="{Binding Name}"
 						SelectedItem="{Binding SelectedDifficulty}" />
 			</HorizontalStackLayout>
-			<HorizontalStackLayout Spacing="12">
-				<DatePicker Date="{Binding FromDate}" />
+            <HorizontalStackLayout Spacing="12">
+                <!--<DatePicker Date="{Binding FromDate}" />
 				<TimePicker Time="{Binding MaxPrep}" />
 			</HorizontalStackLayout>
-			<!--<Button Text="Uygula" Command="{Binding LoadCommand}" />
+			-->
+                <!--<Button Text="Uygula" Command="{Binding LoadCommand}" />
 			<Button Text="Yeni Tarif" Command="{Binding NewRecipeCommand}" />
 			<Label Text="{Binding Error}" TextColor="Red" />
 		</VerticalStackLayout>-->
+            <TimePicker Time="{Binding MaxPrep}" />
+            </HorizontalStackLayout>
             <Button Text="Uygula" Command="{Binding LoadCommand}" />
-            <Button Text="Yeni Tarif" Command="{Binding NewRecipeCommand}" />
+            <!--<Button Text="Yeni Tarif" Command="{Binding NewRecipeCommand}" />-->
             <!--<Button Text="Şifre Değiştir" Command="{Binding ChangePasswordCommand}" />-->
             <Button Text="Çıkış Yap" Command="{Binding LogoutCommand}" />
             <Label Text="{Binding Error}" TextColor="Red" />

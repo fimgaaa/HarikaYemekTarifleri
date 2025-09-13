@@ -18,7 +18,7 @@ namespace HarikaYemekTarifleri.Maui.Services;
 public interface IRecipeService
 {
     Task<IEnumerable<RecipeListItem>> SearchAsync(string? q, int? categoryId, bool? vegetarian,
-        Difficulty? difficulty, DateTime? fromDate, TimeSpan? maxPrep);
+        Difficulty? difficulty, TimeSpan? maxPrep);
     Task<IEnumerable<RecipeListItem>> GetMineAsync();
     Task<RecipeDetail?> GetAsync(int id);
     Task<bool> CreateAsync(RecipeCreateDto dto);

@@ -31,7 +31,7 @@ public partial class RecipesViewModel : BaseViewModel
         new("Zor", Difficulty.Hard)
     ];
     [ObservableProperty] private Option<Difficulty>? selectedDifficulty;
-    [ObservableProperty] private DateTime? fromDate;
+    //[ObservableProperty] private DateTime? fromDate;
     [ObservableProperty] private TimeSpan? maxPrep;
 
     //public RecipesViewModel(IRecipeService recipes, ICategoryService cats, INavigationService navigation)
@@ -52,18 +52,18 @@ public partial class RecipesViewModel : BaseViewModel
                 foreach (var c in all) Categories.Add(c);
             }
             var list = await _recipes.SearchAsync(Q, SelectedCategory?.Id, Vegetarian,
-                SelectedDifficulty?.Value, FromDate, MaxPrep);
+                SelectedDifficulty?.Value, MaxPrep);
             Items.Clear();
             foreach (var x in list) Items.Add(x);
         });
     }
 
-    [RelayCommand]
-    private async Task NewRecipe()
-    {
-        var page = ServiceHelper.Get<Pages.RecipeEditPage>();
-        await _navigation.PushAsync(page);
-    }
+    //[RelayCommand]
+    //private async Task NewRecipe()
+    //{
+    //    var page = ServiceHelper.Get<Pages.RecipeEditPage>();
+    //    await _navigation.PushAsync(page);
+    //}
 
     [RelayCommand]
     private async Task Profile()
