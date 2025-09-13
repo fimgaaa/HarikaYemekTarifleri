@@ -93,19 +93,19 @@ public partial class RecipesViewModel : BaseViewModel
         });
     }
 
-    [RelayCommand]
-    private async Task ChangePassword()
-    {
-        await Guard(async () =>
-        {
-            var oldPwd = await Application.Current!.MainPage!
-                .DisplayPromptAsync("Şifre Değiştir", "Mevcut şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
-            if (oldPwd is null) return;
-            var newPwd = await Application.Current!.MainPage!
-     .DisplayPromptAsync("Şifre Değiştir", "Yeni şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
-            if (newPwd is null) return;
-            var ok = await _auth.ChangePasswordAsync(oldPwd, newPwd);
-            await Application.Current!.MainPage!.DisplayAlert(ok ? "Başarılı" : "Başarısız", ok ? "Şifre değiştirildi" : "Şifre değiştirilemedi", "Tamam");
-        });
-    }
+    //[RelayCommand]
+    //private async Task ChangePassword()
+    //{
+    //    await Guard(async () =>
+    //    {
+    //        var oldPwd = await Application.Current!.MainPage!
+    //            .DisplayPromptAsync("Şifre Değiştir", "Mevcut şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
+    //        if (oldPwd is null) return;
+    //        var newPwd = await Application.Current!.MainPage!
+    // .DisplayPromptAsync("Şifre Değiştir", "Yeni şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
+    //        if (newPwd is null) return;
+    //        var ok = await _auth.ChangePasswordAsync(oldPwd, newPwd);
+    //        await Application.Current!.MainPage!.DisplayAlert(ok ? "Başarılı" : "Başarısız", ok ? "Şifre değiştirildi" : "Şifre değiştirilemedi", "Tamam");
+    //    });
+    //}
 }

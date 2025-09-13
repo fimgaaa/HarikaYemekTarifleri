@@ -39,7 +39,7 @@
 		</VerticalStackLayout>-->
             <Button Text="Uygula" Command="{Binding LoadCommand}" />
             <Button Text="Yeni Tarif" Command="{Binding NewRecipeCommand}" />
-            <Button Text="Şifre Değiştir" Command="{Binding ChangePasswordCommand}" />
+            <!--<Button Text="Şifre Değiştir" Command="{Binding ChangePasswordCommand}" />-->
             <Button Text="Çıkış Yap" Command="{Binding LogoutCommand}" />
             <Label Text="{Binding Error}" TextColor="Red" />
         </VerticalStackLayout>

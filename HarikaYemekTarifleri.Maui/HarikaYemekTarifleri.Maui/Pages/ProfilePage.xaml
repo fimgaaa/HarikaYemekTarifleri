@@ -14,7 +14,8 @@
 		<Entry Placeholder="Kullanıcı adı" Text="{Binding UserName}" />
 		<Entry Placeholder="E-posta" Text="{Binding Email}" />
 		<Button Text="Kaydet" Command="{Binding SaveCommand}" />
-		<CollectionView ItemsSource="{Binding Recipes}">
+        <Button Text="Şifre Değiştir" Command="{Binding ChangePasswordCommand}" />
+        <CollectionView ItemsSource="{Binding Recipes}">
 			<CollectionView.ItemTemplate>
 				<DataTemplate>
 					<Frame Padding="8" Margin="4" HasShadow="True">
