@@ -219,6 +219,7 @@ recipes.MapGet("/", async (AppDbContext db, string? q, int? categoryId, bool? ve
     var query = db.Recipes
         .Include(r => r.RecipeCategories).ThenInclude(rc => rc.Category)
         .Include(r => r.Comments)
+        .Include(r => r.User)
         .AsQueryable();
 
     if (!string.IsNullOrWhiteSpace(q))
@@ -248,6 +249,7 @@ recipes.MapGet("/", async (AppDbContext db, string? q, int? categoryId, bool? ve
             r.Difficulty,
             r.PrepTime,
             r.PublishDate,
+            UserName = r.User.UserName,
             Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
             CommentsCount = r.Comments.Count
         })
@@ -260,6 +262,7 @@ recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
 {
     var uid = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
     var list = await db.Recipes
+        .Include(r => r.User)
         .Where(r => r.UserId == uid)
         .OrderByDescending(r => r.PublishDate)
         .Select(r => new
@@ -270,6 +273,7 @@ recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
             r.Difficulty,
             r.PrepTime,
             r.PublishDate,
+            UserName = r.User.UserName,
             Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
             CommentsCount = r.Comments.Count
         })

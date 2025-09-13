@@ -22,13 +22,17 @@ public class RecipeService : IRecipeService
 
         var res = await _api.GetAsync(url);
         res.EnsureSuccessStatusCode();
-        return await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
+        //return await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
+        var list = await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
+        return list;
     }
     public async Task<IEnumerable<RecipeListItem>> GetMineAsync()
     {
         var res = await _api.GetAsync("/api/recipes/mine");
         res.EnsureSuccessStatusCode();
-        return await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
+        //return await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
+        var list = await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
+        return list;
     }
     public async Task<RecipeDetail?> GetAsync(int id)
     {

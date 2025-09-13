@@ -48,14 +48,24 @@
 			<CollectionView.ItemTemplate>
 				<DataTemplate>
 					<Frame Padding="8" Margin="4" HasShadow="True">
-						<VerticalStackLayout>
+						<!--<VerticalStackLayout>
 							<Label Text="{Binding Title}" FontAttributes="Bold" />
 							<Label Text="{Binding PrepTime}" />
 							<Button Text="Sil"
 									Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Name=page}}"
 									CommandParameter="{Binding .}" />
-						</VerticalStackLayout>
-					</Frame>
+						</VerticalStackLayout>-->
+                        <VerticalStackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="{Binding Title}" FontAttributes="Bold" />
+                                <Label Text="{Binding UserName}" Margin="10,0,0,0" />
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding PrepTime}" />
+                            <Button Text="Sil"
+                                     Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Name=page}}"
+                                     CommandParameter="{Binding .}" />
+                        </VerticalStackLayout>
+                    </Frame>
 				</DataTemplate>
 			</CollectionView.ItemTemplate>
 		</CollectionView>
