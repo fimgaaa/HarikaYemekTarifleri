@@ -9,7 +9,7 @@
 			<Entry Placeholder="Ara..." Text="{Binding Q}" />
 			<Picker Title="Kategori" ItemsSource="{Binding Categories}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCategory}" />-->
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="profile.png"
+        <ToolbarItem IconImageSource="profile.jpg"
                      Order="Primary"
                      Priority="0"
                      Command="{Binding ProfileCommand}" />
