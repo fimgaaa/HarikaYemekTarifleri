@@ -74,14 +74,6 @@ public partial class RecipesViewModel : BaseViewModel
         await _navigation.PushAsync(page);
     }
 
-    [RelayCommand]
-    private async Task OpenRecipe(RecipeListItem item)
-    {
-        var page = ServiceHelper.Get<RecipeDetailPage>();
-        await _navigation.PushAsync(page);
-        if (page.BindingContext is RecipeDetailViewModel vm)
-            await vm.Load(item.Id);
-    }
 
     [RelayCommand]
     private async Task Delete(RecipeListItem item)
