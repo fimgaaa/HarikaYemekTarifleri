@@ -38,6 +38,8 @@ using HarikaYemekTarifleri.Api.Data;    // AppDbContext
 using HarikaYemekTarifleri.Api.Models;  // AppUser, Recipe, Category, Comment, RecipeCategory
 using System.IO;
 using Azure.Core;
+using System.ComponentModel.DataAnnotations;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -203,6 +205,10 @@ users.MapPut("/me", async (AppDbContext db, ClaimsPrincipal u, UserProfileDto dt
     var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
     var entity = await db.Users.FindAsync(id);
     if (entity is null) return Results.NotFound();
+    if (string.IsNullOrWhiteSpace(dto.Email))
+        return Results.BadRequest("Email boş olamaz.");
+    if (!new EmailAddressAttribute().IsValid(dto.Email))
+        return Results.BadRequest("Geçerli bir email adresi giriniz.");
     entity.UserName = dto.UserName ?? entity.UserName;
     entity.Email = dto.Email;
     entity.PhotoUrl = dto.PhotoUrl;
