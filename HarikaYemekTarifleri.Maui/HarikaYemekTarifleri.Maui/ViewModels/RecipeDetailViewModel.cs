@@ -11,7 +11,7 @@ public partial class RecipeDetailViewModel : BaseViewModel
     private readonly IRecipeService _recipes;
     private readonly ICommentService _comments;
 
-    public ObservableCollection<string> Comments { get; } = new();
+    public ObservableCollection<CommentDto> Comments { get; } = new();
 
     [ObservableProperty] private RecipeDetail? recipe;
     [ObservableProperty] private string? newComment;
@@ -44,10 +44,10 @@ public partial class RecipeDetailViewModel : BaseViewModel
         if (string.IsNullOrWhiteSpace(NewComment)) return;
         await Guard(async () =>
         {
-            var ok = await _comments.AddAsync(_recipeId, NewComment!);
-            if (ok)
+            var dto = await _comments.AddAsync(_recipeId, NewComment!);
+            if (dto is not null)
             {
-                Comments.Add(NewComment!);
+                Comments.Add(dto);
                 NewComment = string.Empty;
             }
         });

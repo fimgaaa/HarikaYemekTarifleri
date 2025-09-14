@@ -5,7 +5,6 @@ using HarikaYemekTarifleri.Maui.Services;
 using System.Collections.ObjectModel;
 using HarikaYemekTarifleri.Maui.Pages;
 using HarikaYemekTarifleri.Maui.Helpers;
-using Microsoft.Maui.Controls;
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
 
@@ -15,14 +14,13 @@ public partial class ProfileViewModel : BaseViewModel
     //public ProfileViewModel(IUserService users) => _users = users;
     private readonly IRecipeService _recipes;
     private readonly INavigationService _navigation;
-    private readonly IAuthService _auth;
 
-    public ProfileViewModel(IUserService users, IRecipeService recipes, INavigationService navigation, IAuthService auth)
+
+    public ProfileViewModel(IUserService users, IRecipeService recipes, INavigationService navigation)
     {
         _users = users;
         _recipes = recipes;
         _navigation = navigation;
-        _auth = auth;
     }
 
     public ObservableCollection<RecipeListItem> Recipes { get; } = new();
@@ -68,16 +66,18 @@ public partial class ProfileViewModel : BaseViewModel
     [RelayCommand]
     private async Task ChangePassword()
     {
-        await Guard(async () =>
-        {
-            var oldPwd = await Application.Current!.MainPage!
-                .DisplayPromptAsync("Şifre Değiştir", "Mevcut şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
-            if (oldPwd is null) return;
-            var newPwd = await Application.Current!.MainPage!
-                .DisplayPromptAsync("Şifre Değiştir", "Yeni şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
-            if (newPwd is null) return;
-            var ok = await _auth.ChangePasswordAsync(oldPwd, newPwd);
-            await Application.Current!.MainPage!.DisplayAlert(ok ? "Başarılı" : "Başarısız", ok ? "Şifre değiştirildi" : "Şifre değiştirilemedi", "Tamam");
-        });
+        //await Guard(async () =>
+        //{
+        //    var oldPwd = await Application.Current!.MainPage!
+        //        .DisplayPromptAsync("Şifre Değiştir", "Mevcut şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
+        //    if (oldPwd is null) return;
+        //    var newPwd = await Application.Current!.MainPage!
+        //        .DisplayPromptAsync("Şifre Değiştir", "Yeni şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
+        //    if (newPwd is null) return;
+        //    var ok = await _auth.ChangePasswordAsync(oldPwd, newPwd);
+        //    await Application.Current!.MainPage!.DisplayAlert(ok ? "Başarılı" : "Başarısız", ok ? "Şifre değiştirildi" : "Şifre değiştirilemedi", "Tamam");
+        //});
+        var page = ServiceHelper.Get<ChangePasswordPage>();
+        await _navigation.PushAsync(page);
     }
 }

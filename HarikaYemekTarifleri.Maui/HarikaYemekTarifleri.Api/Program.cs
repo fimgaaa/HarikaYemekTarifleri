@@ -287,7 +287,24 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
         .Include(x => x.RecipeCategories).ThenInclude(rc => rc.Category)
         .Include(x => x.Comments)
         .FirstOrDefaultAsync(x => x.Id == id);
-    return r is null ? Results.NotFound() : Results.Ok(r);
+    //return r is null ? Results.NotFound() : Results.Ok(r);
+    if (r is null) return Results.NotFound();
+
+    var dto = new
+    {
+        r.Id,
+        r.Title,
+        r.Content,
+        r.IsVegetarian,
+        r.Difficulty,
+        r.PrepTime,
+        r.PublishDate,
+        r.UserId,
+        Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
+        Comments = r.Comments.Select(c => new CommentDto { CreatedBy = c.CreatedBy, Text = c.Text })
+    };
+
+    return Results.Ok(dto);
 });
 
 // POST /api/recipes
@@ -416,7 +433,9 @@ comments.MapPost("/", async (AppDbContext db, ClaimsPrincipal u, int recipeId, s
     var c = new Comment { RecipeId = recipeId, Text = text, CreatedBy = userName, CreatedAt = DateTime.UtcNow };
     db.Comments.Add(c);
     await db.SaveChangesAsync();
-    return Results.Ok(c);
+    //return Results.Ok(c);
+    var dto = new CommentDto { CreatedBy = c.CreatedBy, Text = c.Text };
+    return Results.Ok(dto);
 });
 
 app.Run();

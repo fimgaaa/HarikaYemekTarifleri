@@ -13,7 +13,10 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Padding="8" Margin="0,0,0,8" HasShadow="True">
-                            <Label Text="{Binding}" />
+							<VerticalStackLayout>
+								<Label Text="{Binding UserName, StringFormat='{0}:'}" FontAttributes="Bold" />
+								<Label Text="{Binding Text}" />
+							</VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
