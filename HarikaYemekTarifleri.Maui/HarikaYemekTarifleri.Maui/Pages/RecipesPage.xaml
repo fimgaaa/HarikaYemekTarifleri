@@ -79,9 +79,7 @@
                                 <Label Text="{Binding UserName}" Margin="10,0,0,0" />
                             </HorizontalStackLayout>
                             <!--<Label Text="{Binding PrepTime}" />-->
-                            <Button Text="Sil"
-                                     <!--Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Name=page}}"
-                                     CommandParameter="{Binding .}" />-->
+                            <Button Text="Sil" ></Button>
                         </VerticalStackLayout>
                     </Frame>
 				</DataTemplate>
