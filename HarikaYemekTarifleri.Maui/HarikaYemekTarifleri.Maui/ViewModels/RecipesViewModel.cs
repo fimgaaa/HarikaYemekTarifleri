@@ -50,8 +50,10 @@ public partial class RecipesViewModel : BaseViewModel
             {
                 var all = await _cats.GetAllAsync();
                 foreach (var c in all) Categories.Add(c);
+                Categories.Insert(0, new CategoryDto { Id = 0, Name = "Tümü" });
+                SelectedCategory = Categories[0];
             }
-            var list = await _recipes.SearchAsync(Q, SelectedCategory?.Id, Vegetarian,
+            var list = await _recipes.SearchAsync(Q, SelectedCategory?.Id == 0 ? null : SelectedCategory?.Id, Vegetarian,
                 SelectedDifficulty?.Value, MaxPrep);
             Items.Clear();
             foreach (var x in list) Items.Add(x);

@@ -33,9 +33,9 @@
                     ItemsSource="{Binding Categories}"
                     ItemDisplayBinding="{Binding Name}"
                     SelectedItem="{Binding SelectedCategory}" />
-            <HorizontalStackLayout Spacing="4">
+            <HorizontalStackLayout Spacing="0">
                 <CheckBox IsChecked="{Binding Vegetarian}" />
-                <Label Text="Vejetaryen" VerticalOptions="Center" />
+                <Label Text="Vejetaryen" VerticalOptions="Center" Margin=" 4,0,0,0"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout Spacing="12">
                 <!--<DatePicker Date="{Binding FromDate}" />
