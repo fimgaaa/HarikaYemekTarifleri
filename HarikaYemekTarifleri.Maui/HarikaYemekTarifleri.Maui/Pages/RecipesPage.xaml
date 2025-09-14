@@ -59,7 +59,7 @@
             <Label Text="{Binding Error}" TextColor="Red" />
         </VerticalStackLayout>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Items}">
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Items}"  SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
 			<!--<CollectionView.ItemTemplate>
 				<DataTemplate>
 					<Frame Padding="8" Margin="4" HasShadow="True">

@@ -19,6 +19,7 @@ public class RecipeDetail
     public DateTime PublishDate { get; set; }
     public List<string> Categories { get; set; } = new();
     public int UserId { get; set; }
+    public List<string> Comments { get; set; } = new();
 }
 
 public class RecipeCreateDto

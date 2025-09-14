@@ -33,6 +33,7 @@ public partial class RecipesViewModel : BaseViewModel
     [ObservableProperty] private Option<Difficulty>? selectedDifficulty;
     //[ObservableProperty] private DateTime? fromDate;
     [ObservableProperty] private TimeSpan? maxPrep;
+    [ObservableProperty] private RecipeListItem? selectedItem;
 
     //public RecipesViewModel(IRecipeService recipes, ICategoryService cats, INavigationService navigation)
     public RecipesViewModel(IRecipeService recipes, ICategoryService cats, INavigationService navigation, IAuthService auth)
@@ -40,6 +41,22 @@ public partial class RecipesViewModel : BaseViewModel
         //_recipes = recipes; _cats = cats; _navigation = navigation;
         _recipes = recipes; _cats = cats; _navigation = navigation; _auth = auth;
     }
+
+    partial void OnSelectedItemChanged(RecipeListItem? value)
+    {
+        if (value is null) return;
+        _ = NavigateToDetail(value);
+    }
+
+    private async Task NavigateToDetail(RecipeListItem item)
+    {
+        var page = ServiceHelper.Get<RecipeDetailPage>();
+        var vm = (RecipeDetailViewModel)page.BindingContext;
+        await vm.Load(item.Id);
+        await _navigation.PushAsync(page);
+        SelectedItem = null;
+    }
+
 
     [RelayCommand]
     public async Task Load()

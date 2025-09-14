@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HarikaYemekTarifleri.Maui.Pages.RecipeDetailPage"
+             Title="Tarif Detayı">
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="10">
+            <Label Text="{Binding Recipe.Title}" FontAttributes="Bold" FontSize="Medium" />
+            <Label Text="{Binding Recipe.Content}" />
+
+            <Label Text="Yorumlar" FontAttributes="Bold" />
+            <CollectionView ItemsSource="{Binding Comments}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="8" Margin="0,0,0,8" HasShadow="True">
+                            <Label Text="{Binding}" />
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Editor Placeholder="Yorum ekle..." Text="{Binding NewComment}" />
+            <Button Text="Gönder" Command="{Binding AddCommentCommand}" />
+            <Label Text="{Binding Error}" TextColor="Red" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
