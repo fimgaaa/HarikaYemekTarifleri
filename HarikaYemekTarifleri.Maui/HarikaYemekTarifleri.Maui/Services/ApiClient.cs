@@ -12,6 +12,7 @@
 //}
 
 using System.Net.Http.Json;
+using System.Net.Http;
 
 public class ApiClient
 {
@@ -27,6 +28,7 @@ public class ApiClient
 
     public Task<HttpResponseMessage> GetAsync(string url) => _http.GetAsync(url);
     public Task<HttpResponseMessage> PostAsync<T>(string url, T body) => _http.PostAsJsonAsync(url, body);
+    public Task<HttpResponseMessage> PostAsync(string url, HttpContent content) => _http.PostAsync(url, content);
     public Task<HttpResponseMessage> PutAsync<T>(string url, T body) => _http.PutAsJsonAsync(url, body);
     public Task<HttpResponseMessage> DeleteAsync(string url) => _http.DeleteAsync(url);
 }

@@ -36,6 +36,7 @@ using System.Text.Json.Serialization;
 
 using HarikaYemekTarifleri.Api.Data;    // AppDbContext
 using HarikaYemekTarifleri.Api.Models;  // AppUser, Recipe, Category, Comment, RecipeCategory
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +104,8 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -205,6 +208,28 @@ users.MapPut("/me", async (AppDbContext db, ClaimsPrincipal u, UserProfileDto dt
     await db.SaveChangesAsync();
     return Results.NoContent();
 });
+
+users.MapPost("/me/photo", async (AppDbContext db, ClaimsPrincipal u, IFormFile photo, IWebHostEnvironment env) =>
+{
+    var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    var entity = await db.Users.FindAsync(id);
+    if (entity is null) return Results.NotFound();
+    if (photo is null || photo.Length == 0) return Results.BadRequest();
+
+    var uploads = Path.Combine(env.WebRootPath ?? "wwwroot", "photos");
+    Directory.CreateDirectory(uploads);
+    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(photo.FileName)}";
+    var filePath = Path.Combine(uploads, fileName);
+    await using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+        await photo.CopyToAsync(stream);
+    }
+    var url = $"/photos/{fileName}";
+    entity.PhotoUrl = url;
+    await db.SaveChangesAsync();
+    return Results.Ok(new { url });
+});
+
 
 /* =======================================
    TARİF / KATEGORİ / YORUM ENDPOINTLERİ

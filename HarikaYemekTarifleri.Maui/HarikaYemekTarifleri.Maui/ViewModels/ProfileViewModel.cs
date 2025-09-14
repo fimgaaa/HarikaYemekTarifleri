@@ -5,6 +5,9 @@ using HarikaYemekTarifleri.Maui.Services;
 using System.Collections.ObjectModel;
 using HarikaYemekTarifleri.Maui.Pages;
 using HarikaYemekTarifleri.Maui.Helpers;
+using Microsoft.Maui.Media;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.ApplicationModel;
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
 
@@ -28,6 +31,34 @@ public partial class ProfileViewModel : BaseViewModel
     [ObservableProperty] private string? userName;
     [ObservableProperty] private string? email;
     [ObservableProperty] private string? photoUrl;
+
+    [RelayCommand]
+    private async Task SelectPhoto()
+    {
+        await Guard(async () =>
+        {
+            FileResult? file = null;
+            try
+            {
+                file = await MediaPicker.Default.PickPhotoAsync();
+            }
+            catch (FeatureNotSupportedException)
+            {
+                file = await FilePicker.Default.PickAsync(new PickOptions
+                {
+                    FileTypes = FilePickerFileType.Images,
+                    PickerTitle = "Fotoğraf Seç"
+                });
+            }
+
+            if (file != null)
+            {
+                using var stream = await file.OpenReadAsync();
+                var url = await _users.UploadPhotoAsync(stream);
+                if (url != null) PhotoUrl = url;
+            }
+        });
+    }
 
     [RelayCommand]
     public async Task Load()
