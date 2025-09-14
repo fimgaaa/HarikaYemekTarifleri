@@ -205,13 +205,24 @@ users.MapPut("/me", async (AppDbContext db, ClaimsPrincipal u, UserProfileDto dt
     var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
     var entity = await db.Users.FindAsync(id);
     if (entity is null) return Results.NotFound();
-    if (string.IsNullOrWhiteSpace(dto.Email))
-        return Results.BadRequest("Email boş olamaz.");
-    if (!new EmailAddressAttribute().IsValid(dto.Email))
-        return Results.BadRequest("Geçerli bir email adresi giriniz.");
+    //if (string.IsNullOrWhiteSpace(dto.Email))
+    //    return Results.BadRequest("Email boş olamaz.");
+    //if (!new EmailAddressAttribute().IsValid(dto.Email))
+    //    return Results.BadRequest("Geçerli bir email adresi giriniz.");
     entity.UserName = dto.UserName ?? entity.UserName;
-    entity.Email = dto.Email;
-    entity.PhotoUrl = dto.PhotoUrl;
+    //entity.Email = dto.Email;
+    //entity.PhotoUrl = dto.PhotoUrl;
+
+    if (dto.Email != null)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Email))
+            return Results.BadRequest("Email boş olamaz.");
+        if (!new EmailAddressAttribute().IsValid(dto.Email))
+            return Results.BadRequest("Geçerli bir email adresi giriniz.");
+        entity.Email = dto.Email;
+    }
+
+    entity.PhotoUrl = dto.PhotoUrl ?? entity.PhotoUrl;
     await db.SaveChangesAsync();
     return Results.NoContent();
 });
