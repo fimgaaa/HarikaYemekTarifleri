@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HarikaYemekTarifleri.Maui.Helpers;
 using HarikaYemekTarifleri.Maui.Models;
+using HarikaYemekTarifleri.Maui.Pages;
 using HarikaYemekTarifleri.Maui.Services;
 using System.Collections.ObjectModel;
+
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
 
@@ -10,6 +13,7 @@ public partial class RecipeDetailViewModel : BaseViewModel
 {
     private readonly IRecipeService _recipes;
     private readonly ICommentService _comments;
+    private readonly INavigationService _navigation;
 
     public ObservableCollection<CommentDto> Comments { get; } = new();
 
@@ -17,10 +21,11 @@ public partial class RecipeDetailViewModel : BaseViewModel
     [ObservableProperty] private string? newComment;
     private int _recipeId;
 
-    public RecipeDetailViewModel(IRecipeService recipes, ICommentService comments)
+    public RecipeDetailViewModel(IRecipeService recipes, ICommentService comments, INavigationService navigation)
     {
         _recipes = recipes;
         _comments = comments;
+        _navigation = navigation;
     }
 
     public async Task Load(int id)
@@ -51,5 +56,14 @@ public partial class RecipeDetailViewModel : BaseViewModel
                 NewComment = string.Empty;
             }
         });
+    }
+
+    [RelayCommand]
+    private async Task Edit()
+    {
+        var page = ServiceHelper.Get<RecipeEditPage>();
+        if (page.BindingContext is RecipeEditViewModel vm)
+            await vm.Init(_recipeId);
+        await _navigation.PushAsync(page);
     }
 }

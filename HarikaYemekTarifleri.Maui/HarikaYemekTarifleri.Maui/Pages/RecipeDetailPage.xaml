@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HarikaYemekTarifleri.Maui.Pages.RecipeDetailPage"
              Title="Tarif Detayı">
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="Düzenle" Command="{Binding EditCommand}" />
+	</ContentPage.ToolbarItems>
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="10">
             <Label Text="{Binding Recipe.Title}" FontAttributes="Bold" FontSize="Medium" />

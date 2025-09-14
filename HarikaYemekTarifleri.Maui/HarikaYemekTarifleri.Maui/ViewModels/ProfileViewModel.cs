@@ -72,6 +72,14 @@ public partial class ProfileViewModel : BaseViewModel
         });
     }
 
+    [RelayCommand]
+    private async Task OpenRecipe(RecipeListItem item)
+    {
+        var page = ServiceHelper.Get<RecipeDetailPage>();
+        if (page.BindingContext is RecipeDetailViewModel vm)
+            await vm.Load(item.Id);
+        await _navigation.PushAsync(page);
+    }
 
     [RelayCommand]
     private async Task ChangePassword()

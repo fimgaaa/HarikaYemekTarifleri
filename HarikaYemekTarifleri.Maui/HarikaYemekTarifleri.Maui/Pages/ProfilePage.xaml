@@ -20,6 +20,11 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Padding="8" Margin="4" HasShadow="True">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding BindingContext.OpenRecipeCommand, Source={x:Reference Name=page}}"
+                                CommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
                         <HorizontalStackLayout>
                             <Label Text="{Binding Title}" />
                             <Button Text="Sil"
