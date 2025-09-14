@@ -1,5 +1,6 @@
 ﻿using HarikaYemekTarifleri.Maui.Models;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace HarikaYemekTarifleri.Maui.Services;
 
@@ -41,10 +42,12 @@ public class RecipeService : IRecipeService
         return await res.Content.ReadFromJsonAsync<RecipeDetail>();
     }
 
-    public async Task<bool> CreateAsync(RecipeCreateDto dto)
+    public async Task<int?> CreateAsync(RecipeCreateDto dto)
     {
         var res = await _api.PostAsync("/api/recipes", dto);
-        return res.IsSuccessStatusCode;
+        if (!res.IsSuccessStatusCode) return null;
+        var created = await res.Content.ReadFromJsonAsync<RecipeDetail>();
+        return created?.Id;
     }
 
     public async Task<bool> UpdateAsync(int id, RecipeUpdateDto dto)
@@ -57,5 +60,16 @@ public class RecipeService : IRecipeService
     {
         var res = await _api.DeleteAsync($"/api/recipes/{id}");
         return res.IsSuccessStatusCode;
+    }
+
+    public async Task<string?> UploadRecipePhotoAsync(int recipeId, Stream photo)
+    {
+        using var content = new MultipartFormDataContent();
+        content.Add(new StreamContent(photo), "photo", "photo.jpg");
+        var res = await _api.PostAsync($"/api/recipes/{recipeId}/photo", content);
+        if (!res.IsSuccessStatusCode) return null;
+        var json = await res.Content.ReadFromJsonAsync<JsonElement>();
+        if (json.TryGetProperty("url", out var url)) return url.GetString();
+        return null;
     }
 }

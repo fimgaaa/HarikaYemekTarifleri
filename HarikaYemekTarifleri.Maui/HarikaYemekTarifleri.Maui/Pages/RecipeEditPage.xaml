@@ -6,12 +6,20 @@
              Title="Tarif Ekle">
 	<ScrollView>
 		<VerticalStackLayout Padding="16" Spacing="10">
-			<Entry Placeholder="Başlık" Text="{Binding Title}" />
+			<!--<Entry Placeholder="Başlık" Text="{Binding Title}" />
 			<Editor Placeholder="İçerik" HeightRequest="120" Text="{Binding Content}" />
 			<CheckBox IsChecked="{Binding IsVegetarian}" />
 			<Label Text="Vejetaryen" />
-			<Picker Title="Zorluk" ItemsSource="{Binding Source={x:Reference page}, Path=BindingContext.DifficultyOptions}" />
-			<TimePicker Time="{Binding PrepTime}" />
+			<Picker Title="Zorluk" ItemsSource="{Binding Source={x:Reference page}, Path=BindingContext.DifficultyOptions}" />-->
+    
+                <Entry Placeholder="Başlık" Text="{Binding Title}" />
+                <Editor Placeholder="İçerik" HeightRequest="120" Text="{Binding Content}" />
+                <Image Source="{Binding PhotoUrl, TargetNullValue='dotnet_bot.png'}" HeightRequest="200" />
+                <Button Text="Fotoğraf Seç" Command="{Binding SelectPhotoCommand}" />
+                <CheckBox IsChecked="{Binding IsVegetarian}" />
+                <Label Text="Vejetaryen" />
+                <Picker Title="Zorluk" ItemsSource="{Binding Source={x:Reference page}, Path=BindingContext.DifficultyOptions}" />
+                <TimePicker Time="{Binding PrepTime}" />
 			<DatePicker Date="{Binding PublishDate}" />
 
 			<Label Text="Kategoriler" FontAttributes="Bold" />

@@ -21,7 +21,8 @@ public interface IRecipeService
         Difficulty? difficulty, TimeSpan? maxPrep);
     Task<IEnumerable<RecipeListItem>> GetMineAsync();
     Task<RecipeDetail?> GetAsync(int id);
-    Task<bool> CreateAsync(RecipeCreateDto dto);
+    Task<int?> CreateAsync(RecipeCreateDto dto);
     Task<bool> UpdateAsync(int id, RecipeUpdateDto dto);
     Task<bool> DeleteAsync(int id);
+    Task<string?> UploadRecipePhotoAsync(int recipeId, Stream photo);
 }

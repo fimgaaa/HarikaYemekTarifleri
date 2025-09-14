@@ -3,6 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using HarikaYemekTarifleri.Maui.Models;
 using HarikaYemekTarifleri.Maui.Services;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Media;
+using Microsoft.Maui.Storage;
+using Microsoft.Maui.ApplicationModel;
+using System.IO;
 
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
@@ -13,6 +17,7 @@ public partial class RecipeEditViewModel : BaseViewModel
     private readonly ICategoryService _cats;
     private readonly INavigationService _nav;
     private int? _recipeId;
+    private FileResult? _photoFile;
 
     public ObservableCollection<CategoryDto> Categories { get; } = new();
 
@@ -22,6 +27,7 @@ public partial class RecipeEditViewModel : BaseViewModel
     [ObservableProperty] private Difficulty difficulty = Difficulty.Easy;
     [ObservableProperty] private TimeSpan prepTime = TimeSpan.FromMinutes(30);
     [ObservableProperty] private DateTime publishDate = DateTime.Today;
+    [ObservableProperty] private string? photoUrl;
     public ObservableCollection<int> SelectedCategoryIds { get; } = new();
 
     public RecipeEditViewModel(IRecipeService recipes, ICategoryService cats, INavigationService nav)
@@ -48,6 +54,7 @@ public partial class RecipeEditViewModel : BaseViewModel
             Difficulty = recipe.Difficulty;
             PrepTime = recipe.PrepTime;
             PublishDate = recipe.PublishDate;
+            PhotoUrl = recipe.PhotoUrl;
             SelectedCategoryIds.Clear();
             foreach (var name in recipe.Categories)
             {
@@ -55,6 +62,39 @@ public partial class RecipeEditViewModel : BaseViewModel
                 if (cat != null) SelectedCategoryIds.Add(cat.Id);
             }
         }
+    }
+
+    [RelayCommand]
+    private async Task SelectPhoto()
+    {
+        await Guard(async () =>
+        {
+            FileResult? file = null;
+            try
+            {
+                file = await MediaPicker.Default.PickPhotoAsync();
+            }
+            catch (FeatureNotSupportedException)
+            {
+                file = await FilePicker.Default.PickAsync(new PickOptions
+                {
+                    FileTypes = FilePickerFileType.Images,
+                    PickerTitle = "Fotoğraf Seç"
+                });
+            }
+
+            if (file != null)
+            {
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (ext != ".jpg" && ext != ".jpeg" && ext != ".png")
+                    throw new Exception("Sadece JPG veya PNG dosyaları seçilebilir.");
+                using var stream = await file.OpenReadAsync();
+                if (stream.Length > 5 * 1024 * 1024)
+                    throw new Exception("Dosya boyutu 5MB'dan küçük olmalı.");
+                _photoFile = file;
+                PhotoUrl = file.FullPath;
+            }
+        });
     }
 
     [RelayCommand]
@@ -73,9 +113,10 @@ public partial class RecipeEditViewModel : BaseViewModel
                 Difficulty = Difficulty,
                 PrepTime = PrepTime,
                 PublishDate = PublishDate,
-                CategoryIds = SelectedCategoryIds.ToList()
+                CategoryIds = SelectedCategoryIds.ToList(),
+                PhotoUrl = PhotoUrl
             };
-            bool ok;
+            
             if (_recipeId.HasValue)
             {
                 var updateDto = new RecipeUpdateDto
@@ -86,15 +127,31 @@ public partial class RecipeEditViewModel : BaseViewModel
                     Difficulty = dto.Difficulty,
                     PrepTime = dto.PrepTime,
                     PublishDate = dto.PublishDate,
-                    CategoryIds = dto.CategoryIds
+                    CategoryIds = dto.CategoryIds,
+                    PhotoUrl = dto.PhotoUrl
                 };
-                ok = await _recipes.UpdateAsync(_recipeId.Value, updateDto);
+                var ok = await _recipes.UpdateAsync(_recipeId.Value, updateDto);
+                if (!ok) throw new Exception("Kaydetme başarısız.");
+                if (_photoFile != null)
+                {
+                    using var stream = await _photoFile.OpenReadAsync();
+                    var url = await _recipes.UploadRecipePhotoAsync(_recipeId.Value, stream);
+                    if (url != null) PhotoUrl = url;
+                }
             }
             else
             {
-                ok = await _recipes.CreateAsync(dto);
+                var newId = await _recipes.CreateAsync(dto);
+                if (newId is null) throw new Exception("Kaydetme başarısız.");
+                _recipeId = newId;
+                if (_photoFile != null)
+                {
+                    using var stream = await _photoFile.OpenReadAsync();
+                    var url = await _recipes.UploadRecipePhotoAsync(newId.Value, stream);
+                    if (url != null) PhotoUrl = url;
+                }
             }
-            if (!ok) throw new Exception("Kaydetme başarısız.");
+
             await _nav.PopAsync();
         });
     }

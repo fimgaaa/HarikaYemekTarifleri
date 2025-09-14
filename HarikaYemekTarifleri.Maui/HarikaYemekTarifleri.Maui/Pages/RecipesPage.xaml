@@ -74,6 +74,7 @@
                 <DataTemplate>
                     <Frame Padding="8" Margin="4" HasShadow="True">
                         <VerticalStackLayout>
+                            <Image Source="{Binding PhotoUrl, TargetNullValue='dotnet_bot.png'}" HeightRequest="100" />
                             <HorizontalStackLayout>
                                 <Label Text="{Binding Title}" FontAttributes="Bold" />
                                 <Label Text="{Binding UserName}" Margin="10,0,0,0" />

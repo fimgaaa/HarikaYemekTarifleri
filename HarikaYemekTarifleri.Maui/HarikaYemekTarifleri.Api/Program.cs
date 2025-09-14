@@ -293,6 +293,7 @@ recipes.MapGet("/", async (AppDbContext db, string? q, int? categoryId, bool? ve
             r.Difficulty,
             r.PrepTime,
             r.PublishDate,
+            r.PhotoUrl,
             UserName = r.User.UserName,
             Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
             CommentsCount = r.Comments.Count
@@ -317,6 +318,7 @@ recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
             r.Difficulty,
             r.PrepTime,
             r.PublishDate,
+            r.PhotoUrl,
             UserName = r.User.UserName,
             Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
             CommentsCount = r.Comments.Count
@@ -344,6 +346,7 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
         r.PrepTime,
         r.PublishDate,
         r.UserId,
+        r.PhotoUrl,
         Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
         Comments = r.Comments.Select(c => new CommentDto { CreatedBy = c.CreatedBy, Text = c.Text })
     };
@@ -368,6 +371,7 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
         Difficulty = dto.Difficulty,
         PrepTime = dto.PrepTime,
         PublishDate = dto.PublishDate,
+        PhotoUrl = dto.PhotoUrl,
         UserId = uid
     };
 
@@ -386,6 +390,7 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
         entity.Difficulty,
         entity.PrepTime,
         entity.PublishDate,
+        entity.PhotoUrl,
         CategoryIds = dto.CategoryIds
     });
 });
@@ -404,6 +409,7 @@ recipes.MapPut("/{recipeId:int}", async (AppDbContext db, int recipeId, RecipeUp
     r.Difficulty = dto.Difficulty;
     r.PrepTime = dto.PrepTime;
     r.PublishDate = dto.PublishDate;
+    r.PhotoUrl = dto.PhotoUrl ?? r.PhotoUrl;
 
     r.RecipeCategories.Clear();
     foreach (var cid in dto.CategoryIds.Distinct())
@@ -413,6 +419,25 @@ recipes.MapPut("/{recipeId:int}", async (AppDbContext db, int recipeId, RecipeUp
     return Results.NoContent();
 });
 
+recipes.MapPost("/{id:int}/photo", async (AppDbContext db, int id, IFormFile photo, IWebHostEnvironment env, HttpRequest request) =>
+{
+    var recipe = await db.Recipes.FindAsync(id);
+    if (recipe is null) return Results.NotFound();
+    if (photo is null || photo.Length == 0) return Results.BadRequest();
+
+    var uploads = Path.Combine(env.WebRootPath ?? "wwwroot", "recipe-photos");
+    Directory.CreateDirectory(uploads);
+    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(photo.FileName)}";
+    var filePath = Path.Combine(uploads, fileName);
+    await using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+        await photo.CopyToAsync(stream);
+    }
+    var url = $"{request.Scheme}://{request.Host}/recipe-photos/{fileName}";
+    recipe.PhotoUrl = url;
+    await db.SaveChangesAsync();
+    return Results.Ok(new { url });
+});
 
 //recipes.MapPost("/", async (AppDbContext db, ClaimsPrincipal user, Recipe dto, int[] categoryIds) =>
 //{

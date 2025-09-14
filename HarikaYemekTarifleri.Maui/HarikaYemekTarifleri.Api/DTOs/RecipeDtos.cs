@@ -11,6 +11,7 @@ public class RecipeCreateDto
     public TimeSpan PrepTime { get; set; }
     public DateTime PublishDate { get; set; }
     public List<int> CategoryIds { get; set; } = new();
+    public string? PhotoUrl { get; set; }
 }
 
 public class RecipeUpdateDto : RecipeCreateDto { }

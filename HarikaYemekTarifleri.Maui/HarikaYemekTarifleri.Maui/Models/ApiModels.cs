@@ -6,7 +6,7 @@ public record RecipeListItem(
     int Id, string Title, bool IsVegetarian, Difficulty Difficulty,
         //TimeSpan PrepTime, DateTime PublishDate, IEnumerable<string> Categories, int CommentsCount);
     TimeSpan PrepTime, DateTime PublishDate, IEnumerable<string> Categories,
-    int CommentsCount, string UserName);
+    int CommentsCount, string UserName, string? PhotoUrl);
 
 public class RecipeDetail
 {
@@ -20,6 +20,7 @@ public class RecipeDetail
     public List<string> Categories { get; set; } = new();
     public int UserId { get; set; }
     //public List<string> Comments { get; set; } = new();
+    public string? PhotoUrl { get; set; }
     public List<CommentDto> Comments { get; set; } = new();
 }
 
@@ -32,6 +33,7 @@ public class RecipeCreateDto
     public TimeSpan PrepTime { get; set; }
     public DateTime PublishDate { get; set; }
     public List<int> CategoryIds { get; set; } = new();
+    public string? PhotoUrl { get; set; }
 }
 public class RecipeUpdateDto : RecipeCreateDto { }
 

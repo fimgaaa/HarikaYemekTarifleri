@@ -10,6 +10,8 @@ public class Recipe : BaseEntity
     public TimeSpan PrepTime { get; set; }          // TimePicker (#16)
     public DateTime PublishDate { get; set; }       // DatePicker (#16)
 
+    public string? PhotoUrl { get; set; }
+
     public int UserId { get; set; }                 // Sahibi
     public AppUser User { get; set; } = null!;
 
