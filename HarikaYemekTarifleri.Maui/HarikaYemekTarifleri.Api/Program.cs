@@ -406,10 +406,13 @@ recipes.MapPut("/{recipeId:int}", async (AppDbContext db, int recipeId, RecipeUp
 //    return Results.NoContent();
 //});
 
-recipes.MapDelete("/{id:int}", async (AppDbContext db, int id) =>
+recipes.MapDelete("/{id:int}", async (AppDbContext db, ClaimsPrincipal u, int id) =>
 {
+    var userName = u.Identity?.Name;
     var r = await db.Recipes.FindAsync(id);
     if (r is null) return Results.NotFound();
+    if (r.CreatedBy != userName && r.UserId.ToString() != userName)
+        return Results.Forbid();
     db.Remove(r);
     await db.SaveChangesAsync();
     return Results.NoContent();

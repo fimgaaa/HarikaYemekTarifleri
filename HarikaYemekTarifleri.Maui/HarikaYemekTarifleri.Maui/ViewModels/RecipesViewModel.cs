@@ -92,15 +92,6 @@ public partial class RecipesViewModel : BaseViewModel
     }
 
 
-    [RelayCommand]
-    private async Task Delete(RecipeListItem item)
-    {
-        await Guard(async () =>
-        {
-            var ok = await _recipes.DeleteAsync(item.Id);
-            if (ok) Items.Remove(item);
-        });
-    }
 
     [RelayCommand]
     private async Task Logout()

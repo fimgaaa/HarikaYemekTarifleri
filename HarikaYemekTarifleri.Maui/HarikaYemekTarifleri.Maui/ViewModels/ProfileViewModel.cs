@@ -62,6 +62,16 @@ public partial class ProfileViewModel : BaseViewModel
         await _navigation.PushAsync(page);
     }
 
+    [RelayCommand]
+    private async Task Delete(RecipeListItem item)
+    {
+        await Guard(async () =>
+        {
+            var ok = await _recipes.DeleteAsync(item.Id);
+            if (ok) Recipes.Remove(item);
+        });
+    }
+
 
     [RelayCommand]
     private async Task ChangePassword()
