@@ -8,6 +8,7 @@ using HarikaYemekTarifleri.Maui.Helpers;
 using Microsoft.Maui.Media;
 using Microsoft.Maui.Storage;
 using Microsoft.Maui.ApplicationModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
 
@@ -81,9 +82,23 @@ public partial class ProfileViewModel : BaseViewModel
     [RelayCommand]
     public async Task Save()
     {
-        //var profile = new UserProfile { UserName = UserName, Email = Email };
-        var profile = new UserProfile { UserName = UserName, Email = Email, PhotoUrl = PhotoUrl };
-        await Guard(async () => await _users.UpdateProfileAsync(profile));
+        ////var profile = new UserProfile { UserName = UserName, Email = Email };
+        //var profile = new UserProfile { UserName = UserName, Email = Email, PhotoUrl = PhotoUrl };
+        //await Guard(async () => await _users.UpdateProfileAsync(profile));
+        await Guard(async () =>
+        {
+            if (string.IsNullOrWhiteSpace(UserName))
+                throw new Exception("Kullanıcı adı boş olamaz.");
+
+            if (string.IsNullOrWhiteSpace(Email))
+                throw new Exception("Email boş olamaz.");
+
+            if (!new EmailAddressAttribute().IsValid(Email))
+                throw new Exception("Geçerli bir email adresi giriniz.");
+
+            var profile = new UserProfile { UserName = UserName, Email = Email, PhotoUrl = PhotoUrl };
+            await _users.UpdateProfileAsync(profile);
+        });
     }
 
     [RelayCommand]

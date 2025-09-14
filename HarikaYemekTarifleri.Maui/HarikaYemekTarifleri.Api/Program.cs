@@ -37,6 +37,7 @@ using System.Text.Json.Serialization;
 using HarikaYemekTarifleri.Api.Data;    // AppDbContext
 using HarikaYemekTarifleri.Api.Models;  // AppUser, Recipe, Category, Comment, RecipeCategory
 using System.IO;
+using Azure.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -209,7 +210,7 @@ users.MapPut("/me", async (AppDbContext db, ClaimsPrincipal u, UserProfileDto dt
     return Results.NoContent();
 });
 
-users.MapPost("/me/photo", async (AppDbContext db, ClaimsPrincipal u, IFormFile photo, IWebHostEnvironment env) =>
+users.MapPost("/me/photo", async (AppDbContext db, ClaimsPrincipal u, IFormFile photo, IWebHostEnvironment env, HttpRequest request) =>
 {
     var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
     var entity = await db.Users.FindAsync(id);
@@ -224,7 +225,8 @@ users.MapPost("/me/photo", async (AppDbContext db, ClaimsPrincipal u, IFormFile 
     {
         await photo.CopyToAsync(stream);
     }
-    var url = $"/photos/{fileName}";
+    //var url = $"/photos/{fileName}";
+    var url = $"{request.Scheme}://{request.Host}/photos/{fileName}";
     entity.PhotoUrl = url;
     await db.SaveChangesAsync();
     return Results.Ok(new { url });
