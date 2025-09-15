@@ -56,7 +56,18 @@
                         ItemDisplayBinding="{Binding Name}"
                         SelectedItem="{Binding SelectedDifficulty}" />
             </HorizontalStackLayout>
-            <Button Text="Uygula" Command="{Binding LoadCommand}" />
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Hazırlık Süresi:" VerticalOptions="Center" />
+                <TimePicker Time="{Binding MaxPrep}" Format="HH:mm" />
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="12">
+                <Button Text="Uygula"
+                        Command="{Binding LoadCommand}"
+                        HorizontalOptions="FillAndExpand" />
+                <Button Text="Temizle"
+                        Command="{Binding ClearFiltersCommand}"
+                        HorizontalOptions="FillAndExpand" />
+            </HorizontalStackLayout>
             <!--<Button Text="Yeni Tarif" Command="{Binding NewRecipeCommand}" />-->
             <!--<Button Text="Şifre Değiştir" Command="{Binding ChangePasswordCommand}" />-->
 

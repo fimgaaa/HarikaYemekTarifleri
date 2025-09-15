@@ -77,6 +77,22 @@ public partial class RecipesViewModel : BaseViewModel
         });
     }
 
+    [RelayCommand]
+    private async Task ClearFilters()
+    {
+        Q = null;
+        Vegetarian = null;
+        SelectedDifficulty = null;
+        MaxPrep = null;
+        if (Categories.Count > 0)
+        {
+            SelectedCategory = Categories[0];
+        }
+        await Load();
+    }
+
+
+
     //[RelayCommand]
     //private async Task NewRecipe()
     //{
