@@ -30,6 +30,20 @@ public partial class RecipeEditViewModel : BaseViewModel
     [ObservableProperty] private string? photoUrl;
     public ObservableCollection<int> SelectedCategoryIds { get; } = new();
 
+    public List<Option<Difficulty>> DifficultyOptions { get; } =
+[
+    new("Kolay", Difficulty.Easy),
+    new("Orta", Difficulty.Medium),
+    new("Zor", Difficulty.Hard)
+];
+
+    [ObservableProperty] private Option<Difficulty>? selectedDifficulty;
+
+    partial void OnSelectedDifficultyChanged(Option<Difficulty>? value)
+    {
+        Difficulty = value?.Value ?? Difficulty.Easy;
+    }
+
     public RecipeEditViewModel(IRecipeService recipes, ICategoryService cats, INavigationService nav)
     { _recipes = recipes; _cats = cats; _nav = nav; }
 
@@ -39,6 +53,7 @@ public partial class RecipeEditViewModel : BaseViewModel
         var all = await _cats.GetAllAsync();
         Categories.Clear();
         foreach (var c in all) Categories.Add(c);
+        SelectedDifficulty = DifficultyOptions.FirstOrDefault(o => o.Value == Difficulty);
     }
 
     public async Task Init(int id)
@@ -52,6 +67,7 @@ public partial class RecipeEditViewModel : BaseViewModel
             Content = recipe.Content;
             IsVegetarian = recipe.IsVegetarian;
             Difficulty = recipe.Difficulty;
+            SelectedDifficulty = DifficultyOptions.FirstOrDefault(o => o.Value == recipe.Difficulty);
             PrepTime = recipe.PrepTime;
             PublishDate = recipe.PublishDate;
             PhotoUrl = recipe.PhotoUrl;

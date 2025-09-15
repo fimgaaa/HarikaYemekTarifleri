@@ -18,8 +18,11 @@
                 <Button Text="Fotoğraf Seç" Command="{Binding SelectPhotoCommand}" />
                 <CheckBox IsChecked="{Binding IsVegetarian}" />
                 <Label Text="Vejetaryen" />
-                <Picker Title="Zorluk" ItemsSource="{Binding Source={x:Reference page}, Path=BindingContext.DifficultyOptions}" />
-                <TimePicker Time="{Binding PrepTime}" />
+            <Picker Title="Zorluk"
+                        ItemsSource="{Binding Source={x:Reference page}, Path=BindingContext.DifficultyOptions}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedDifficulty}" />
+            <TimePicker Time="{Binding PrepTime}" />
 			<DatePicker Date="{Binding PublishDate}" />
 
 			<Label Text="Kategoriler" FontAttributes="Bold" />
