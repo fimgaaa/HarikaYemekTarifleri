@@ -13,6 +13,10 @@
                      Order="Primary"
                      Priority="0"
                      Command="{Binding ProfileCommand}" />
+        <ToolbarItem IconImageSource="logout.png"
+                     Order="Primary"
+                     Priority="1"
+                     Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
     <Grid RowDefinitions="Auto, *" Padding="12">
         <VerticalStackLayout Spacing="8">
@@ -55,7 +59,7 @@
             <Button Text="Uygula" Command="{Binding LoadCommand}" />
             <!--<Button Text="Yeni Tarif" Command="{Binding NewRecipeCommand}" />-->
             <!--<Button Text="Şifre Değiştir" Command="{Binding ChangePasswordCommand}" />-->
-            <Button Text="Çıkış Yap" Command="{Binding LogoutCommand}" />
+
             <Label Text="{Binding Error}" TextColor="Red" />
         </VerticalStackLayout>
 
