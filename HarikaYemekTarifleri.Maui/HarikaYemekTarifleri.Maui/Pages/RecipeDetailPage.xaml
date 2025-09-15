@@ -11,6 +11,7 @@
             <Image Source="{Binding Recipe.PhotoUrl, TargetNullValue='dotnet_bot.png'}" HeightRequest="200" />
             <Label Text="{Binding Recipe.Title}" FontAttributes="Bold" FontSize="Medium" />
             <Label Text="{Binding Recipe.Content}" />
+            <Label Text="{Binding Recipe.PrepTime, StringFormat='Hazırlanma Süresi: {0:mm\\:ss}'}" />
 
             <Label Text="Yorumlar" FontAttributes="Bold" />
             <CollectionView ItemsSource="{Binding Comments}">
