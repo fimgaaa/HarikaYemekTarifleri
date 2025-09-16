@@ -4,9 +4,7 @@
              x:Class="HarikaYemekTarifleri.Maui.Pages.RecipeDetailPage"
              x:Name="DetailPage"
              Title="Tarif Detayı">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Düzenle" Command="{Binding EditCommand}" IsEnabled="{Binding IsOwner}" />
-    </ContentPage.ToolbarItems>
+
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="10">
             <Image Source="{Binding Recipe.PhotoUrl, TargetNullValue='dotnet_bot.png'}" HeightRequest="200" />
