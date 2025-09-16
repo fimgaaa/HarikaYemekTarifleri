@@ -327,6 +327,31 @@ recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
     return Results.Ok(list);
 });
 
+recipes.MapGet("/user/{userId:int}", async (AppDbContext db, int userId) =>
+{
+    var list = await db.Recipes
+        .Include(r => r.User)
+        .Where(r => r.UserId == userId)
+        .OrderByDescending(r => r.PublishDate)
+        .Select(r => new
+        {
+            r.Id,
+            r.Title,
+            r.IsVegetarian,
+            r.Difficulty,
+            r.PrepTime,
+            r.PublishDate,
+            r.PhotoUrl,
+            UserName = r.User.UserName,
+            Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
+            CommentsCount = r.Comments.Count
+        })
+        .ToListAsync();
+
+    return Results.Ok(list);
+});
+
+
 recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
 {
     var r = await db.Recipes

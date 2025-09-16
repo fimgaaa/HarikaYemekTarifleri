@@ -5,6 +5,7 @@ using HarikaYemekTarifleri.Maui.Models;
 using HarikaYemekTarifleri.Maui.Pages;
 using HarikaYemekTarifleri.Maui.Services;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
@@ -16,6 +17,7 @@ public partial class RecipeDetailViewModel : BaseViewModel
     private readonly INavigationService _navigation;
 
     public ObservableCollection<CommentDto> Comments { get; } = new();
+    public ObservableCollection<RecipeListItem> AuthorRecipes { get; } = new();
 
     [ObservableProperty] private RecipeDetail? recipe;
     [ObservableProperty] private string? newComment;
@@ -33,13 +35,21 @@ public partial class RecipeDetailViewModel : BaseViewModel
         _recipeId = id;
         await Guard(async () =>
         {
-            Recipe = await _recipes.GetAsync(id);
+            var detail = await _recipes.GetAsync(id);
+            Recipe = detail;
             Comments.Clear();
-            if (Recipe?.Comments is not null)
+            AuthorRecipes.Clear();
+            if (detail is null) return;
+
+            if (detail.Comments is not null)
             {
-                foreach (var c in Recipe.Comments)
+                foreach (var c in detail.Comments)
                     Comments.Add(c);
             }
+
+            var authorRecipes = await _recipes.GetByUserAsync(detail.UserId);
+            foreach (var item in authorRecipes.Where(r => r.Id != detail.Id))
+                AuthorRecipes.Add(item);
         });
     }
 
@@ -64,6 +74,18 @@ public partial class RecipeDetailViewModel : BaseViewModel
         var page = ServiceHelper.Get<RecipeEditPage>();
         if (page.BindingContext is RecipeEditViewModel vm)
             await vm.Init(_recipeId);
+        await _navigation.PushAsync(page);
+    }
+
+    [RelayCommand]
+    private async Task OpenRecipe(RecipeListItem item)
+    {
+        if (item is null) return;
+        if (item.Id == _recipeId) return;
+
+        var page = ServiceHelper.Get<RecipeDetailPage>();
+        if (page.BindingContext is RecipeDetailViewModel vm)
+            await vm.Load(item.Id);
         await _navigation.PushAsync(page);
     }
 }

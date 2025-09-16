@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HarikaYemekTarifleri.Maui.Pages.RecipeDetailPage"
+             x:Name="DetailPage"
              Title="Tarif Detayı">
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Düzenle" Command="{Binding EditCommand}" />
@@ -30,6 +31,39 @@
             <Editor Placeholder="Yorum ekle..." Text="{Binding NewComment}" />
             <Button Text="Gönder" Command="{Binding AddCommentCommand}" />
             <Label Text="{Binding Error}" TextColor="Red" />
+
+            <Label Text="Yazarın Diğer Tarifleri" FontAttributes="Bold" Margin="0,16,0,0" />
+            <CollectionView ItemsSource="{Binding AuthorRecipes}"
+                            SelectionMode="None"
+                            HeightRequest="220">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="12" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame WidthRequest="160"
+                               Padding="8"
+                               Margin="0,0,12,0"
+                               HasShadow="True">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference DetailPage}, Path=BindingContext.OpenRecipeCommand}"
+                                                      CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <VerticalStackLayout Spacing="6">
+                                <Image Source="{Binding PhotoUrl, TargetNullValue='dotnet_bot.png'}"
+                                       HeightRequest="100"
+                                       Aspect="AspectFill" />
+                                <Label Text="{Binding Title}"
+                                       FontAttributes="Bold"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding PublishDate, StringFormat='{0:dd.MM.yyyy}'}"
+                                       FontSize="12"
+                                       TextColor="Gray" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

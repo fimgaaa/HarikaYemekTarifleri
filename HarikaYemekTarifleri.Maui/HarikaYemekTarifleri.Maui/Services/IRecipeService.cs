@@ -20,6 +20,7 @@ public interface IRecipeService
     Task<IEnumerable<RecipeListItem>> SearchAsync(string? q, int? categoryId, bool? vegetarian,
         Difficulty? difficulty, TimeSpan? maxPrep);
     Task<IEnumerable<RecipeListItem>> GetMineAsync();
+    Task<IEnumerable<RecipeListItem>> GetByUserAsync(int userId);
     Task<RecipeDetail?> GetAsync(int id);
     Task<int?> CreateAsync(RecipeCreateDto dto);
     Task<bool> UpdateAsync(int id, RecipeUpdateDto dto);
