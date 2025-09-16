@@ -79,8 +79,13 @@ public class AuthService : IAuthService
             var payload = parts[1];
             var bytes = Base64UrlDecode(payload);
             using var doc = JsonDocument.Parse(bytes);
-            if (doc.RootElement.TryGetProperty("nameid", out var idProp) &&
-                int.TryParse(idProp.GetString(), out var userId))
+            var userIdValue = TryGetClaimValue(doc.RootElement,
+               "sub",
+               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+               "https://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
+               "nameid");
+
+            if (!string.IsNullOrWhiteSpace(userIdValue) && int.TryParse(userIdValue, out var userId))
             {
                 _currentUserId = userId;
             }
@@ -110,5 +115,22 @@ public class AuthService : IAuthService
             builder.Append('=');
         }
         return Convert.FromBase64String(builder.ToString());
+    }
+
+    private static string? TryGetClaimValue(JsonElement root, params string[] claimNames)
+    {
+        foreach (var claimName in claimNames)
+        {
+            if (root.TryGetProperty(claimName, out var claimProp))
+            {
+                var value = claimProp.GetString();
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    return value;
+                }
+            }
+        }
+
+        return null;
     }
 }
