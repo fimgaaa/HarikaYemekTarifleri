@@ -4,10 +4,7 @@
              x:Class="HarikaYemekTarifleri.Maui.Pages.RecipesPage"
              x:Name="page"
              Title="Tarifler">
-	<!--<Grid RowDefinitions="Auto, *" Padding="12">
-		<VerticalStackLayout Spacing="8">
-			<Entry Placeholder="Ara..." Text="{Binding Q}" />
-			<Picker Title="Kategori" ItemsSource="{Binding Categories}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCategory}" />-->
+
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="profile.jpg"
                      Order="Primary"
@@ -18,92 +15,89 @@
                      Priority="1"
                      Command="{Binding LogoutCommand}" />
     </ContentPage.ToolbarItems>
-    <Grid RowDefinitions="Auto, *" Padding="12">
-        <VerticalStackLayout Spacing="8">
-            <Entry Placeholder="Ara..." Text="{Binding Q}" />
-            <!--<Picker Title="Kategori" ItemsSource="{Binding Categories}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCategory}" />
-            <HorizontalStackLayout Spacing="12">
-				<CheckBox IsChecked="{Binding Vegetarian}" />
-				<Label Text="Vejetaryen" VerticalOptions="Center" />
-			</HorizontalStackLayout>
-			<HorizontalStackLayout Spacing="12">
-				<Label Text="Zorluk:" VerticalOptions="Center" />
-				<Picker Title="Seçiniz"
-						ItemsSource="{Binding DifficultyOptions}"
-						ItemDisplayBinding="{Binding Name}"
-						SelectedItem="{Binding SelectedDifficulty}" />
-			</HorizontalStackLayout>-->
-            <Picker Title="Kategori"
-                    ItemsSource="{Binding Categories}"
-                    ItemDisplayBinding="{Binding Name}"
-                    SelectedItem="{Binding SelectedCategory}" />
-            <HorizontalStackLayout Spacing="0">
-                <CheckBox IsChecked="{Binding Vegetarian}" />
-                <Label Text="Vejetaryen" VerticalOptions="Center" Margin=" 2,0,0,0"/>
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="12">
-                <!--<DatePicker Date="{Binding FromDate}" />
-				<TimePicker Time="{Binding MaxPrep}" />
-			</HorizontalStackLayout>
-			-->
-                <!--<Button Text="Uygula" Command="{Binding LoadCommand}" />
-			<Button Text="Yeni Tarif" Command="{Binding NewRecipeCommand}" />
-			<Label Text="{Binding Error}" TextColor="Red" />
-		</VerticalStackLayout>-->
-            <!--<TimePicker Time="{Binding MaxPrep}" />-->
-                <Label Text="Zorluk:" VerticalOptions="Center" />
-                <Picker ItemsSource="{Binding DifficultyOptions}"
+
+    <Grid Padding="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- FILTRE / ARAMA BLOĞU -->
+        <Frame Grid.Row="0"
+               Padding="16"
+               CornerRadius="12"
+               BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+               HasShadow="True"
+               HorizontalOptions="FillAndExpand">
+            <VerticalStackLayout Spacing="8" HorizontalOptions="FillAndExpand">
+
+                <Entry Placeholder="Ara..."
+                       Text="{Binding Q}"
+                       HorizontalOptions="FillAndExpand" />
+
+                <Picker Title="Kategori"
+                        ItemsSource="{Binding Categories}"
                         ItemDisplayBinding="{Binding Name}"
-                        SelectedItem="{Binding SelectedDifficulty}" />
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="12">
-                <Label Text="Hazırlık Süresi:" VerticalOptions="Center" />
-                <TimePicker Time="{Binding MaxPrep}" Format="HH:mm" />
-            </HorizontalStackLayout>
-            <HorizontalStackLayout Spacing="12">
-                <Button Text="Uygula"
-                        Command="{Binding LoadCommand}"
+                        SelectedItem="{Binding SelectedCategory}"
                         HorizontalOptions="FillAndExpand" />
-                <Button Text="Temizle"
-                        Command="{Binding ClearFiltersCommand}"
-                        HorizontalOptions="FillAndExpand" />
-            </HorizontalStackLayout>
-            <!--<Button Text="Yeni Tarif" Command="{Binding NewRecipeCommand}" />-->
-            <!--<Button Text="Şifre Değiştir" Command="{Binding ChangePasswordCommand}" />-->
 
-            <Label Text="{Binding Error}" TextColor="Red" />
-        </VerticalStackLayout>
+                <HorizontalStackLayout Spacing="0" HorizontalOptions="FillAndExpand">
+                    <CheckBox IsChecked="{Binding Vegetarian}" />
+                    <Label Text="Vejetaryen" VerticalOptions="Center" Margin="2,0,0,0" />
+                </HorizontalStackLayout>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Items}"  SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
+                <HorizontalStackLayout Spacing="12" HorizontalOptions="FillAndExpand">
+                    <Label Text="Zorluk:" VerticalOptions="Center" />
+                    <Picker ItemsSource="{Binding DifficultyOptions}"
+                            ItemDisplayBinding="{Binding Name}"
+                            SelectedItem="{Binding SelectedDifficulty}"
+                            HorizontalOptions="FillAndExpand" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="12" HorizontalOptions="FillAndExpand">
+                    <Label Text="Hazırlık Süresi:" VerticalOptions="Center" />
+                    <TimePicker Time="{Binding MaxPrep}" Format="HH:mm" HorizontalOptions="FillAndExpand" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Spacing="12" HorizontalOptions="FillAndExpand">
+                    <Button Text="Uygula"
+                            Command="{Binding LoadCommand}"
+                            HorizontalOptions="FillAndExpand" />
+                    <Button Text="Temizle"
+                            Command="{Binding ClearFiltersCommand}"
+                            HorizontalOptions="FillAndExpand" />
+                </HorizontalStackLayout>
+
+                <Label Text="{Binding Error}" TextColor="Red" />
+            </VerticalStackLayout>
+        </Frame>
+        <!-- ÖNEMLİ: Frame burada kapanıyor -->
+
+        <!-- LISTE -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Items}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedItem}">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="2" />
             </CollectionView.ItemsLayout>
-            <!--<CollectionView.ItemTemplate>
-				<DataTemplate>
-					<Frame Padding="8" Margin="4" HasShadow="True">
-						--><!--<VerticalStackLayout>
-							<Label Text="{Binding Title}" FontAttributes="Bold" />
-							<Label Text="{Binding PrepTime}" />
-							<Button Text="Sil"
-									Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Name=page}}"
-									CommandParameter="{Binding .}" />
-						</VerticalStackLayout>-->
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Padding="8" Margin="4" HasShadow="True">
                         <VerticalStackLayout Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
-                            <Image Source="{Binding PhotoUrl, TargetNullValue='dotnet_bot.png'}"
+                            <Image Source="{Binding PhotoUrl, TargetNullValue=dotnet_bot.png}"
                                    HeightRequest="120"
                                    WidthRequest="120"
                                    Aspect="AspectFill" />
                             <Label Text="{Binding Title}"
                                    FontAttributes="Bold"
                                    HorizontalTextAlignment="Center" />
-
                         </VerticalStackLayout>
                     </Frame>
-				</DataTemplate>
-			</CollectionView.ItemTemplate>
-		</CollectionView>
-	</Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>
+

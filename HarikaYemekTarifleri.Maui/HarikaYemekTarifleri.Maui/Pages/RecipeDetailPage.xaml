@@ -17,10 +17,19 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Padding="8" Margin="0,0,0,8" HasShadow="True">
-							<VerticalStackLayout>
-								<Label Text="{Binding UserName, StringFormat='{0}:'}" FontAttributes="Bold" />
-								<Label Text="{Binding Text}" />
-							</VerticalStackLayout>
+                            <VerticalStackLayout>
+                                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                    <Label Text="{Binding UserName, StringFormat='{0}:'}" FontAttributes="Bold" HorizontalOptions="StartAndExpand" />
+                                    <Button Text="Sil"
+                                            Command="{Binding Source={x:Reference DetailPage}, Path=BindingContext.DeleteCommentCommand}"
+                                            CommandParameter="{Binding .}"
+                                            IsVisible="{Binding IsMine}"
+                                            HorizontalOptions="End"
+                                            Padding="10,0"
+                                            FontSize="12" />
+                                </HorizontalStackLayout>
+                                <Label Text="{Binding Text}" />
+                            </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

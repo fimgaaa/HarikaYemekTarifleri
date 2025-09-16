@@ -6,6 +6,7 @@ using HarikaYemekTarifleri.Maui.Pages;
 using HarikaYemekTarifleri.Maui.Services;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System;
 
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
@@ -19,9 +20,11 @@ public partial class RecipeDetailViewModel : BaseViewModel
 
     public ObservableCollection<CommentDto> Comments { get; } = new();
     public ObservableCollection<RecipeListItem> AuthorRecipes { get; } = new();
+    [ObservableProperty]
+    private RecipeDetail? recipe;
 
-    [ObservableProperty] private RecipeDetail? recipe;
-    [ObservableProperty] private string? newComment;
+    [ObservableProperty]
+    private string? newComment;
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditCommand))]
     private bool isOwner;
@@ -45,31 +48,65 @@ public partial class RecipeDetailViewModel : BaseViewModel
             Recipe = detail;
             Comments.Clear();
             AuthorRecipes.Clear();
-            if (detail is null) return;
+            if (detail is null)
+            {
+                return;
+            }
 
             if (detail.Comments is not null)
             {
-                foreach (var c in detail.Comments)
-                    Comments.Add(c);
+                foreach (var comment in detail.Comments)
+                {
+                    AddCommentToCollection(comment);
+                }
             }
 
             var authorRecipes = await _recipes.GetByUserAsync(detail.UserId);
             foreach (var item in authorRecipes.Where(r => r.Id != detail.Id))
+            {
                 AuthorRecipes.Add(item);
+            }
         });
     }
 
     [RelayCommand]
     private async Task AddComment()
     {
-        if (string.IsNullOrWhiteSpace(NewComment)) return;
+        if (string.IsNullOrWhiteSpace(NewComment))
+        {
+            return;
+        }
         await Guard(async () =>
         {
             var dto = await _comments.AddAsync(_recipeId, NewComment!);
             if (dto is not null)
             {
-                Comments.Add(dto);
+                dto.UserName = string.IsNullOrWhiteSpace(dto.UserName)
+                    ? _auth.CurrentUserName ?? string.Empty
+                    : dto.UserName;
+
+                AddCommentToCollection(dto);
+                Recipe?.Comments.Add(dto);
                 NewComment = string.Empty;
+            }
+        });
+    }
+
+    [RelayCommand]
+    private async Task DeleteComment(CommentDto comment)
+    {
+        if (comment is null || !comment.IsMine)
+        {
+            return;
+        }
+
+        await Guard(async () =>
+        {
+            var deleted = await _comments.DeleteAsync(comment.Id);
+            if (deleted)
+            {
+                Comments.Remove(comment);
+                Recipe?.Comments.Remove(comment);
             }
         });
     }
@@ -96,7 +133,9 @@ public partial class RecipeDetailViewModel : BaseViewModel
     {
         var page = ServiceHelper.Get<RecipeEditPage>();
         if (page.BindingContext is RecipeEditViewModel vm)
-            await vm.Init(_recipeId);
+        { await vm.Init(_recipeId);
+        }
+            
         await _navigation.PushAsync(page);
     }
 
@@ -105,12 +144,44 @@ public partial class RecipeDetailViewModel : BaseViewModel
     [RelayCommand]
     private async Task OpenRecipe(RecipeListItem item)
     {
-        if (item is null) return;
-        if (item.Id == _recipeId) return;
+        if (item is null || item.Id == _recipeId)
+        {
+            return;
+        }
+
 
         var page = ServiceHelper.Get<RecipeDetailPage>();
         if (page.BindingContext is RecipeDetailViewModel vm)
+        {
             await vm.Load(item.Id);
+        }
+
         await _navigation.PushAsync(page);
+    }
+    private void AddCommentToCollection(CommentDto comment)
+    {
+        if (comment is null)
+        {
+            return;
+        }
+
+        comment.IsMine = IsCurrentUsersComment(comment);
+        Comments.Add(comment);
+    }
+
+    private bool IsCurrentUsersComment(CommentDto comment)
+    {
+        if (comment is null)
+        {
+            return false;
+        }
+
+        var currentUserName = _auth.CurrentUserName;
+        if (string.IsNullOrWhiteSpace(currentUserName))
+        {
+            return false;
+        }
+
+        return string.Equals(comment.UserName, currentUserName, StringComparison.OrdinalIgnoreCase);
     }
 }

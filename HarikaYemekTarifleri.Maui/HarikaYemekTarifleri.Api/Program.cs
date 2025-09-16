@@ -373,7 +373,7 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
         r.UserId,
         r.PhotoUrl,
         Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
-        Comments = r.Comments.Select(c => new CommentDto { CreatedBy = c.CreatedBy, Text = c.Text })
+        Comments = r.Comments.Select(c => new CommentDto { Id = c.Id, CreatedBy = c.CreatedBy, Text = c.Text })
     };
 
     return Results.Ok(dto);
@@ -557,8 +557,27 @@ comments.MapPost("/", async (AppDbContext db, ClaimsPrincipal u, int recipeId, s
     db.Comments.Add(c);
     await db.SaveChangesAsync();
     //return Results.Ok(c);
-    var dto = new CommentDto { CreatedBy = c.CreatedBy, Text = c.Text };
+    var dto = new CommentDto { Id = c.Id, CreatedBy = c.CreatedBy, Text = c.Text };
     return Results.Ok(dto);
 });
+
+comments.MapDelete("/{commentId:int}", async (AppDbContext db, ClaimsPrincipal u, int commentId) =>
+{
+    var userName = u.Identity?.Name;
+    if (string.IsNullOrWhiteSpace(userName))
+        return Results.Forbid();
+
+    var comment = await db.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+    if (comment is null)
+        return Results.NotFound();
+
+    if (!string.Equals(comment.CreatedBy, userName, StringComparison.OrdinalIgnoreCase))
+        return Results.Forbid();
+
+    db.Comments.Remove(comment);
+    await db.SaveChangesAsync();
+    return Results.NoContent();
+});
+
 
 app.Run();
