@@ -22,8 +22,12 @@
                         ItemsSource="{Binding Source={x:Reference page}, Path=BindingContext.DifficultyOptions}"
                         ItemDisplayBinding="{Binding Name}"
                         SelectedItem="{Binding SelectedDifficulty}" />
-            <TimePicker Time="{Binding PrepTime}" />
-			<DatePicker Date="{Binding PublishDate}" />
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Hazırlık Süresi:" VerticalOptions="Center" />
+                <TimePicker Time="{Binding PrepTime}" Format="HH:mm" />
+            </HorizontalStackLayout>
+            <DatePicker Date="{Binding PublishDate}" />
+
 
 			<Label Text="Kategoriler" FontAttributes="Bold" />
 			<CollectionView ItemsSource="{Binding Categories}">
