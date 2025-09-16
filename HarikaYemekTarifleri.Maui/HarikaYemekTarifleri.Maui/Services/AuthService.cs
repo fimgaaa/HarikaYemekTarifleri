@@ -90,13 +90,15 @@ public class AuthService : IAuthService
                 _currentUserId = userId;
             }
 
-            if (doc.RootElement.TryGetProperty("unique_name", out var nameProp))
+            var userNameValue = TryGetClaimValue(doc.RootElement,
+                "unique_name",
+                "name",
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+                "https://schemas.xmlsoap.org/ws/2005/05/identity/claims/name");
+
+            if (!string.IsNullOrWhiteSpace(userNameValue))
             {
-                _currentUserName = nameProp.GetString();
-            }
-            else if (doc.RootElement.TryGetProperty("name", out var altNameProp))
-            {
-                _currentUserName = altNameProp.GetString();
+                _currentUserName = userNameValue;
             }
         }
         catch
