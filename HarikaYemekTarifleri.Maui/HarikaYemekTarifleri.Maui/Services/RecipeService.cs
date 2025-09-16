@@ -18,7 +18,7 @@ public class RecipeService : IRecipeService
         if (vegetarian.HasValue) qs.Add($"vegetarian={vegetarian.Value.ToString().ToLower()}");
         if (difficulty.HasValue) qs.Add($"difficulty={(int)difficulty.Value}");
         //if (fromDate.HasValue) qs.Add($"fromDate={fromDate.Value:yyyy-MM-dd}");
-        if (maxPrep.HasValue) qs.Add($"maxPrep={maxPrep.Value}");
+        if (maxPrep.HasValue) qs.Add($"maxPrep={maxPrep.Value:c}");
         var url = "/api/recipes" + (qs.Count > 0 ? "?" + string.Join("&", qs) : "");
 
         var res = await _api.GetAsync(url);
