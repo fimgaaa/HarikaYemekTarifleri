@@ -1,5 +1,6 @@
 ﻿using HarikaYemekTarifleri.Maui.Models;
 using System.Net.Http.Json;
+using System.Net;
 using System.Text.Json;
 
 namespace HarikaYemekTarifleri.Maui.Services;
@@ -60,6 +61,8 @@ public class RecipeService : IRecipeService
     public async Task<bool> UpdateAsync(int id, RecipeUpdateDto dto)
     {
         var res = await _api.PutAsync($"/api/recipes/{id}", dto);
+        if (res.StatusCode == HttpStatusCode.Forbidden)
+            throw new UnauthorizedAccessException("Bu tarif üzerinde düzenleme yetkiniz yok.");
         return res.IsSuccessStatusCode;
     }
 

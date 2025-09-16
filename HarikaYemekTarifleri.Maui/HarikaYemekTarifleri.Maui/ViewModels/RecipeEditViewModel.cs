@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using HarikaYemekTarifleri.Maui.Models;
 using HarikaYemekTarifleri.Maui.Services;
 using System.Collections.ObjectModel;
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Media;
 using Microsoft.Maui.Storage;
 using Microsoft.Maui.ApplicationModel;
@@ -146,8 +147,17 @@ public partial class RecipeEditViewModel : BaseViewModel
                     CategoryIds = dto.CategoryIds,
                     PhotoUrl = dto.PhotoUrl
                 };
-                var ok = await _recipes.UpdateAsync(_recipeId.Value, updateDto);
-                if (!ok) throw new Exception("Kaydetme başarısız.");
+                try
+                {
+                    var ok = await _recipes.UpdateAsync(_recipeId.Value, updateDto);
+                    if (!ok) throw new Exception("Kaydetme başarısız.");
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    await Application.Current!.MainPage!.DisplayAlert("Yetkisiz", ex.Message, "Tamam");
+                    throw;
+                }
+
                 if (_photoFile != null)
                 {
                     using var stream = await _photoFile.OpenReadAsync();

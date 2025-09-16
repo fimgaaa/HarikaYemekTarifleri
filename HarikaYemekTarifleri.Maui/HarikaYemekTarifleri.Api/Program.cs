@@ -422,11 +422,27 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
 
 // PUT /api/recipes/{id}
 /*recipes.MapPut("/{id:int}", async (AppDbContext db, int id,  RecipeUpdateDto dto)*/
-recipes.MapPut("/{recipeId:int}", async (AppDbContext db, int recipeId, RecipeUpdateDto dto) =>
+recipes.MapPut("/{recipeId:int}", async (AppDbContext db, ClaimsPrincipal user, int recipeId, RecipeUpdateDto dto) =>
 {
     var r = await db.Recipes.Include(x => x.RecipeCategories)
                             .FirstOrDefaultAsync(x => x.Id == recipeId);
     if (r is null) return Results.NotFound();
+
+    var currentUserIdValue = user.FindFirstValue(ClaimTypes.NameIdentifier);
+    var currentUserName = user.Identity?.Name;
+
+    var isOwner = false;
+    if (int.TryParse(currentUserIdValue, out var currentUserId))
+        isOwner = r.UserId == currentUserId;
+
+    if (!isOwner && !string.IsNullOrWhiteSpace(currentUserName) &&
+        !string.IsNullOrWhiteSpace(r.CreatedBy))
+    {
+        isOwner = string.Equals(r.CreatedBy, currentUserName, StringComparison.OrdinalIgnoreCase);
+    }
+
+    if (!isOwner)
+        return Results.Forbid();
 
     r.Title = dto.Title;
     r.Content = dto.Content;
@@ -503,9 +519,19 @@ recipes.MapPost("/{id:int}/photo", async (AppDbContext db, int id, IFormFile pho
 recipes.MapDelete("/{id:int}", async (AppDbContext db, ClaimsPrincipal u, int id) =>
 {
     var userName = u.Identity?.Name;
+    var userIdClaim = u.FindFirstValue(ClaimTypes.NameIdentifier);
+    int? userId = null;
+    if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out var parsedUserId))
+    {
+        userId = parsedUserId;
+    }
+
     var r = await db.Recipes.FindAsync(id);
     if (r is null) return Results.NotFound();
-    if (r.CreatedBy != userName && r.UserId.ToString() != userName)
+
+    var ownsRecipe = userId.HasValue && r.UserId == userId.Value;
+    var createdByMatches = r.UserId == 0 && !string.IsNullOrEmpty(userName) && r.CreatedBy == userName;
+    if (!ownsRecipe && !createdByMatches)
         return Results.Forbid();
     db.Remove(r);
     await db.SaveChangesAsync();

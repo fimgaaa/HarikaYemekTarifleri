@@ -15,24 +15,30 @@ public partial class RecipeDetailViewModel : BaseViewModel
     private readonly IRecipeService _recipes;
     private readonly ICommentService _comments;
     private readonly INavigationService _navigation;
+    private readonly IAuthService _auth;
 
     public ObservableCollection<CommentDto> Comments { get; } = new();
     public ObservableCollection<RecipeListItem> AuthorRecipes { get; } = new();
 
     [ObservableProperty] private RecipeDetail? recipe;
     [ObservableProperty] private string? newComment;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(EditCommand))]
+    private bool isOwner;
     private int _recipeId;
 
-    public RecipeDetailViewModel(IRecipeService recipes, ICommentService comments, INavigationService navigation)
+    public RecipeDetailViewModel(IRecipeService recipes, ICommentService comments, INavigationService navigation, IAuthService auth)
     {
         _recipes = recipes;
         _comments = comments;
         _navigation = navigation;
+        _auth = auth;
     }
 
     public async Task Load(int id)
     {
         _recipeId = id;
+        IsOwner = false;
         await Guard(async () =>
         {
             var detail = await _recipes.GetAsync(id);
@@ -68,7 +74,24 @@ public partial class RecipeDetailViewModel : BaseViewModel
         });
     }
 
-    [RelayCommand]
+    partial void OnRecipeChanged(RecipeDetail? value)
+    {
+        if (value is null)
+        {
+            IsOwner = false;
+            return;
+        }
+
+        var owns = false;
+        if (_auth.CurrentUserId.HasValue)
+        {
+            owns = value.UserId == _auth.CurrentUserId.Value;
+        }
+
+        IsOwner = owns;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanEdit))]
     private async Task Edit()
     {
         var page = ServiceHelper.Get<RecipeEditPage>();
@@ -76,6 +99,8 @@ public partial class RecipeDetailViewModel : BaseViewModel
             await vm.Init(_recipeId);
         await _navigation.PushAsync(page);
     }
+
+    private bool CanEdit() => IsOwner;
 
     [RelayCommand]
     private async Task OpenRecipe(RecipeListItem item)
