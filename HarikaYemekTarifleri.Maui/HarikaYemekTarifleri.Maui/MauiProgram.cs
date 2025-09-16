@@ -82,7 +82,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<RecipeEditViewModel>();
         builder.Services.AddSingleton<ProfileViewModel>();
         builder.Services.AddSingleton<RegisterViewModel>();
-        builder.Services.AddSingleton<RecipeDetailViewModel>();
+        builder.Services.AddTransient<RecipeDetailViewModel>();
         builder.Services.AddSingleton<ChangePasswordViewModel>();
 
         // Pages
@@ -91,7 +91,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<RecipeEditPage>();
         builder.Services.AddSingleton<ProfilePage>();
         builder.Services.AddSingleton<RegisterPage>();
-        builder.Services.AddSingleton<RecipeDetailPage>();
+        builder.Services.AddTransient<RecipeDetailPage>();
         builder.Services.AddSingleton<ChangePasswordPage>();
 
         var app = builder.Build();
