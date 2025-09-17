@@ -9,7 +9,8 @@
     <controls:NavigationPage.TitleView>
         <Grid ColumnDefinitions="*,Auto"
               Padding="0,0,8,0"
-              VerticalOptions="Center">
+              VerticalOptions="Center"
+              HorizontalOptions="FillAndExpand">
             <Label Text="Tarifler"
                    FontAttributes="Bold"
                    FontSize="20"
@@ -22,7 +23,7 @@
                          HeightRequest="40"
                          WidthRequest="40"
                          Padding="0"
-                         HorizontalOptions="End"
+                         HorizontalOptions="EndAndExpand"
                          VerticalOptions="Center" />
         </Grid>
     </controls:NavigationPage.TitleView>
