@@ -25,15 +25,25 @@
     <Color x:Key="Accent">#00897B</Color>
     <Color x:Key="AccentDark">#4DB6AC</Color>-->
 
-    <Color x:Key="Primary">#FF1744</Color>
+    <!--<Color x:Key="Primary">#FF1744</Color>
     <Color x:Key="PrimaryDark">#D50000</Color>
     <Color x:Key="PrimaryDarkText">#FFEBEE</Color>
     <Color x:Key="Secondary">#FFEBEE</Color>
     <Color x:Key="SecondaryDark">#FFCDD2</Color>
     <Color x:Key="SecondaryDarkText">#FCE4EC</Color>
     <Color x:Key="Tertiary">#F06292</Color>
-    <Color x:Key="TertiaryDark">#C2185B</Color>
+    <Color x:Key="TertiaryDark">#cc2e38</Color>-->
 
+    <Color x:Key="Primary">#B53225</Color>
+    <Color x:Key="PrimaryDark">#87251B</Color>
+    <Color x:Key="PrimaryDarkText">#FFEDEA</Color>
+    <Color x:Key="Secondary">#F6E1DE</Color>
+    <Color x:Key="SecondaryDark">#D79B95</Color>
+    <Color x:Key="SecondaryDarkText">#FFF4F2</Color>
+    <Color x:Key="Tertiary">#E77B70</Color>
+    <Color x:Key="TertiaryDark">#9E3A30</Color>
+    <Color x:Key="Accent">#2F8FA3</Color>
+    <Color x:Key="AccentDark">#1E5F6B</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
