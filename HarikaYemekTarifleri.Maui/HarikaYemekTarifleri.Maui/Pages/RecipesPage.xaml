@@ -31,9 +31,10 @@
                HorizontalOptions="FillAndExpand">
             <VerticalStackLayout Spacing="8" HorizontalOptions="FillAndExpand">
 
-                <Entry Placeholder="Ara..."
+                <Entry Placeholder="Tarif ara..."
                        Text="{Binding Q}"
-                       HorizontalOptions="FillAndExpand" />
+                       HorizontalOptions="FillAndExpand"
+                       PlaceholderColor="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource AccentDark}}" />
 
                 <Picker Title="Kategori"
                         ItemsSource="{Binding Categories}"
