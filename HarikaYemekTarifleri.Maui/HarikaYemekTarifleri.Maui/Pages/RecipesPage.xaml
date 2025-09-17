@@ -5,7 +5,7 @@
              x:Name="page"
              Title="Tarifler">
 
-    <NavigationPage.TitleView>
+    <ContentPage.TitleView>
         <Grid ColumnDefinitions="*,Auto"
               Padding="0,0,8,0"
               VerticalOptions="Center">
@@ -24,7 +24,7 @@
                          HorizontalOptions="End"
                          VerticalOptions="Center" />
         </Grid>
-    </NavigationPage.TitleView>
+    </ContentPage.TitleView>
 
     <ContentPage.ToolbarItems>
 
