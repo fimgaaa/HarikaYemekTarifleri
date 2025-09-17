@@ -58,7 +58,7 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\logout.png" />
-	  <None Remove="Resources\Images\profile.jpg" />
+	  <None Remove="Resources\Images\profile.png" />
 	</ItemGroup>
 
 	<ItemGroup>

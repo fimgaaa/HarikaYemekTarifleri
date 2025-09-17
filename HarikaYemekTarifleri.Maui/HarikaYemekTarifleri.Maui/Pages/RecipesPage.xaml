@@ -6,7 +6,7 @@
              Title="Tarifler">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="profile.jpg"
+        <ToolbarItem IconImageSource="profile.png"
                      Order="Primary"
                      Priority="0"
                      Command="{Binding ProfileCommand}" />
@@ -55,13 +55,14 @@
                             SelectedItem="{Binding SelectedDifficulty}"
                             HorizontalOptions="FillAndExpand" />
 
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="2" Spacing="4">
+                        <Label Text="Hazırlık Süresi" />
+                        <TimePicker
+                            Time="{Binding MaxPrep}"
+                            Format="HH\\:mm"
+                            HorizontalOptions="FillAndExpand" />
+                    </VerticalStackLayout>
 
-                    <TimePicker Grid.Row="0"
-                                Grid.Column="2"
-                                Title="Hazırlık Süresi"
-                                Time="{Binding MaxPrep}"
-                                Format="HH:mm"
-                                HorizontalOptions="FillAndExpand" />
                     <HorizontalStackLayout Grid.Row="1"
                                            Grid.ColumnSpan="3"
                                            Spacing="4"
