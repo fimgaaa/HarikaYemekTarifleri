@@ -28,10 +28,6 @@
     </controls:NavigationPage.TitleView>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="profile.png"
-                     Order="Primary"
-                     Priority="0"
-                     Command="{Binding ProfileCommand}" />
 
         <ToolbarItem IconImageSource="logout.png"
                      Order="Primary"
