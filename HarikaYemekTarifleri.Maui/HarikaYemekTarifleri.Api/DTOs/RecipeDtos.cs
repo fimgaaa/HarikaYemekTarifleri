@@ -9,7 +9,6 @@ public class RecipeCreateDto
     public bool IsVegetarian { get; set; }
     public Difficulty Difficulty { get; set; }
     public TimeSpan PrepTime { get; set; }
-    public DateTime PublishDate { get; set; }
     public List<int> CategoryIds { get; set; } = new();
     public string? PhotoUrl { get; set; }
 }

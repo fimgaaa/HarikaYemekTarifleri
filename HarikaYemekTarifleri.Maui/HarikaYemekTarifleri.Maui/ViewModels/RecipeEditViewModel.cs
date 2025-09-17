@@ -27,7 +27,7 @@ public partial class RecipeEditViewModel : BaseViewModel
     [ObservableProperty] private bool isVegetarian;
     [ObservableProperty] private Difficulty difficulty = Difficulty.Easy;
     [ObservableProperty] private TimeSpan prepTime = TimeSpan.FromMinutes(30);
-    [ObservableProperty] private DateTime publishDate = DateTime.Today;
+
     [ObservableProperty] private string? photoUrl;
     public ObservableCollection<int> SelectedCategoryIds { get; } = new();
 
@@ -70,7 +70,7 @@ public partial class RecipeEditViewModel : BaseViewModel
             Difficulty = recipe.Difficulty;
             SelectedDifficulty = DifficultyOptions.FirstOrDefault(o => o.Value == recipe.Difficulty);
             PrepTime = recipe.PrepTime;
-            PublishDate = recipe.PublishDate;
+
             PhotoUrl = recipe.PhotoUrl;
             SelectedCategoryIds.Clear();
             foreach (var name in recipe.Categories)
@@ -129,7 +129,6 @@ public partial class RecipeEditViewModel : BaseViewModel
                 IsVegetarian = IsVegetarian,
                 Difficulty = Difficulty,
                 PrepTime = PrepTime,
-                PublishDate = PublishDate,
                 CategoryIds = SelectedCategoryIds.ToList(),
                 PhotoUrl = PhotoUrl
             };
@@ -143,7 +142,6 @@ public partial class RecipeEditViewModel : BaseViewModel
                     IsVegetarian = dto.IsVegetarian,
                     Difficulty = dto.Difficulty,
                     PrepTime = dto.PrepTime,
-                    PublishDate = dto.PublishDate,
                     CategoryIds = dto.CategoryIds,
                     PhotoUrl = dto.PhotoUrl
                 };

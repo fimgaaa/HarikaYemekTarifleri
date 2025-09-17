@@ -253,20 +253,20 @@ recipes.MapGet("/", async (AppDbContext db, string? q, int? categoryId, bool? ve
         query = query.Where(r => r.Difficulty == difficulty.Value);
 
     if (fromDate.HasValue)
-        query = query.Where(r => r.PublishDate >= fromDate.Value);
+        query = query.Where(r => r.CreatedAt >= fromDate.Value);
 
     if (maxPrep.HasValue)
         query = query.Where(r => r.PrepTime <= maxPrep.Value);
 
     var list = await query
-        .OrderByDescending(r => r.PublishDate)
+        .OrderByDescending(r => r.CreatedAt)
         .Select(r => new {
             r.Id,
             r.Title,
             r.IsVegetarian,
             r.Difficulty,
             r.PrepTime,
-            r.PublishDate,
+            r.CreatedAt,
             r.PhotoUrl,
             UserName = r.User.UserName,
             Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
@@ -283,7 +283,7 @@ recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
     var list = await db.Recipes
         .Include(r => r.User)
         .Where(r => r.UserId == uid)
-        .OrderByDescending(r => r.PublishDate)
+        .OrderByDescending(r => r.CreatedAt)
         .Select(r => new
         {
             r.Id,
@@ -291,7 +291,7 @@ recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
             r.IsVegetarian,
             r.Difficulty,
             r.PrepTime,
-            r.PublishDate,
+            r.CreatedAt,
             r.PhotoUrl,
             UserName = r.User.UserName,
             Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
@@ -306,7 +306,7 @@ recipes.MapGet("/user/{userId:int}", async (AppDbContext db, int userId) =>
     var list = await db.Recipes
         .Include(r => r.User)
         .Where(r => r.UserId == userId)
-        .OrderByDescending(r => r.PublishDate)
+        .OrderByDescending(r => r.CreatedAt)
         .Select(r => new
         {
             r.Id,
@@ -314,7 +314,7 @@ recipes.MapGet("/user/{userId:int}", async (AppDbContext db, int userId) =>
             r.IsVegetarian,
             r.Difficulty,
             r.PrepTime,
-            r.PublishDate,
+            r.CreatedAt,
             r.PhotoUrl,
             UserName = r.User.UserName,
             Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
@@ -343,7 +343,7 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
         r.IsVegetarian,
         r.Difficulty,
         r.PrepTime,
-        r.PublishDate,
+        r.CreatedAt,
         r.UserId,
         r.PhotoUrl,
         Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
@@ -369,7 +369,6 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
         IsVegetarian = dto.IsVegetarian,
         Difficulty = dto.Difficulty,
         PrepTime = dto.PrepTime,
-        PublishDate = dto.PublishDate,
         PhotoUrl = dto.PhotoUrl,
         UserId = uid
     };
@@ -388,7 +387,7 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
         entity.IsVegetarian,
         entity.Difficulty,
         entity.PrepTime,
-        entity.PublishDate,
+        entity.CreatedAt,
         entity.PhotoUrl,
         CategoryIds = dto.CategoryIds
     });
@@ -423,7 +422,6 @@ recipes.MapPut("/{recipeId:int}", async (AppDbContext db, ClaimsPrincipal user, 
     r.IsVegetarian = dto.IsVegetarian;
     r.Difficulty = dto.Difficulty;
     r.PrepTime = dto.PrepTime;
-    r.PublishDate = dto.PublishDate;
     r.PhotoUrl = dto.PhotoUrl ?? r.PhotoUrl;
 
     r.RecipeCategories.Clear();
