@@ -5,6 +5,7 @@
              x:Name="page"
              Title="Tarifler">
 
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="profile.png"
                      Order="Primary"

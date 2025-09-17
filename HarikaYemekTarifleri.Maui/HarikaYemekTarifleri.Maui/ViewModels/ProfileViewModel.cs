@@ -114,10 +114,17 @@ public partial class ProfileViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task Delete(RecipeListItem item)
+    public async Task Delete(RecipeListItem item)
     {
         await Guard(async () =>
         {
+            var confirmed = await (Application.Current?.MainPage?
+            .DisplayAlert("Tarifi Sil", $"{item.Title} silinsin mi?", "Evet", "Vazgeç")
+            ?? Task.FromResult(false));
+
+                    if (!confirmed)
+                        return;
+
             var ok = await _recipes.DeleteAsync(item.Id);
             if (ok)
             {

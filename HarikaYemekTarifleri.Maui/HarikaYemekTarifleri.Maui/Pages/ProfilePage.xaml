@@ -4,6 +4,21 @@
              x:Class="HarikaYemekTarifleri.Maui.Pages.ProfilePage"
              x:Name="page"
              Title="Profil">
+
+    <ContentPage.Resources>
+        <Style x:Key="OutlinedImageButtonStyle"
+               TargetType="ImageButton">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="BorderColor"
+                    Value="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}" />
+            <Setter Property="BorderWidth" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HeightRequest" Value="44" />
+            <Setter Property="WidthRequest" Value="44" />
+            <Setter Property="Aspect" Value="AspectFit" />
+        </Style>
+    </ContentPage.Resources>
+    
     <ScrollView>
         <Grid Padding="24" RowSpacing="12" ColumnSpacing="12">
             <Grid.RowDefinitions>
@@ -68,9 +83,11 @@
                                     </Frame.GestureRecognizers>
                                     <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
                                         <Label Text="{Binding Title}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
-                                        <Button Text="Sil"
-                                                Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Name=page}}"
-                                                CommandParameter="{Binding .}" />
+                                        <ImageButton Source="trash.png"
+                                                     Style="{StaticResource OutlinedImageButtonStyle}"
+                                                     HorizontalOptions="End"
+                                                     Command="{Binding BindingContext.DeleteCommand, Source={x:Reference Name=page}}"
+                                                     CommandParameter="{Binding .}" />
                                     </HorizontalStackLayout>
                                 </Frame>
                             </DataTemplate>
