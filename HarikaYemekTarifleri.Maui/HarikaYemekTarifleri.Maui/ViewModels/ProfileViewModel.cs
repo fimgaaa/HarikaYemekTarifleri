@@ -18,6 +18,7 @@ public partial class ProfileViewModel : BaseViewModel
     //public ProfileViewModel(IUserService users) => _users = users;
     private readonly IRecipeService _recipes;
     private readonly INavigationService _navigation;
+    private readonly List<RecipeListItem> _allRecipes = new();
 
 
     public ProfileViewModel(IUserService users, IRecipeService recipes, INavigationService navigation)
@@ -32,6 +33,9 @@ public partial class ProfileViewModel : BaseViewModel
     [ObservableProperty] private string? userName;
     [ObservableProperty] private string? email;
     [ObservableProperty] private string? photoUrl;
+    [ObservableProperty] private string? searchText;
+
+    partial void OnSearchTextChanged(string? value) => ApplySearchFilter();
 
     [RelayCommand]
     private async Task SelectPhoto()
@@ -74,8 +78,9 @@ public partial class ProfileViewModel : BaseViewModel
                 PhotoUrl = profile.PhotoUrl;
             }
             var list = await _recipes.GetMineAsync();
-            Recipes.Clear();
-            foreach (var r in list) Recipes.Add(r);
+            _allRecipes.Clear();
+            _allRecipes.AddRange(list);
+            ApplySearchFilter();
         });
     }
 
@@ -114,7 +119,13 @@ public partial class ProfileViewModel : BaseViewModel
         await Guard(async () =>
         {
             var ok = await _recipes.DeleteAsync(item.Id);
-            if (ok) Recipes.Remove(item);
+            if (ok)
+            {
+                var existing = _allRecipes.FirstOrDefault(r => r.Id == item.Id);
+                if (existing != null)
+                    _allRecipes.Remove(existing);
+                ApplySearchFilter();
+            }
         });
     }
 
@@ -143,5 +154,22 @@ public partial class ProfileViewModel : BaseViewModel
         //});
         var page = ServiceHelper.Get<ChangePasswordPage>();
         await _navigation.PushAsync(page);
+    }
+
+    private void ApplySearchFilter()
+    {
+        var query = SearchText?.Trim();
+        IEnumerable<RecipeListItem> filtered = _allRecipes;
+
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            filtered = _allRecipes.Where(r =>
+                !string.IsNullOrWhiteSpace(r.Title) &&
+                r.Title!.Contains(query, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        Recipes.Clear();
+        foreach (var recipe in filtered)
+            Recipes.Add(recipe);
     }
 }
