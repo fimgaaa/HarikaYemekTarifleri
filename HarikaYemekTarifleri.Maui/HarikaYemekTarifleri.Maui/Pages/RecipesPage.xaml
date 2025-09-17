@@ -5,19 +5,12 @@
              x:Name="page"
              Title="Tarifler">
 
-
-    <ContentPage.TitleView>
-        <Grid Padding="0,0,12,0">
-            <ImageButton Source="profile.png"
-                     WidthRequest="56"
-                     HeightRequest="56"
-                     BackgroundColor="Transparent"
-                     HorizontalOptions="End"
-                     Command="{Binding ProfileCommand}" />
-            </Grid>
-        </ContentPage.TitleView>
+    
     <ContentPage.ToolbarItems>
-
+        <ToolbarItem IconImageSource="profile.png"
+                     Order="Primary"
+                     Priority="0"
+                     Command="{Binding ProfileCommand}" />
         <ToolbarItem IconImageSource="logout.png"
                      Order="Primary"
                      Priority="1"
