@@ -35,25 +35,20 @@
                        Text="{Binding Q}"
                        HorizontalOptions="FillAndExpand"
                        PlaceholderColor="{AppThemeBinding Light={StaticResource Accent}, Dark={StaticResource AccentDark}}" />
-                <Grid ColumnDefinitions="*,Auto,*,*"
+                <Grid ColumnDefinitions="*,*,*"
+                      RowDefinitions="Auto,Auto"
                       ColumnSpacing="12"
                       HorizontalOptions="FillAndExpand">
-                    <Picker Grid.Column="0"
+                    <Picker Grid.Row="0"
+                            Grid.Column="0"
                             Title="Kategori"
                             ItemsSource="{Binding Categories}"
                             ItemDisplayBinding="{Binding Name}"
                             SelectedItem="{Binding SelectedCategory}"
                             HorizontalOptions="FillAndExpand" />
 
-                    <HorizontalStackLayout Grid.Column="1"
-                                           Spacing="4"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Start">
-                        <CheckBox IsChecked="{Binding Vegetarian}" />
-                        <Label Text="Vejetaryen" VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-
-                    <Picker Grid.Column="2"
+                    <Picker Grid.Row="0"
+                            Grid.Column="1"
                             Title="Zorluk"
                             ItemsSource="{Binding DifficultyOptions}"
                             ItemDisplayBinding="{Binding Name}"
@@ -61,10 +56,21 @@
                             HorizontalOptions="FillAndExpand" />
 
 
-                    <TimePicker Grid.Column="3"
+                    <TimePicker Grid.Row="0"
+                                Grid.Column="2"
+                                Title="Hazırlık Süresi"
                                 Time="{Binding MaxPrep}"
                                 Format="HH:mm"
                                 HorizontalOptions="FillAndExpand" />
+                    <HorizontalStackLayout Grid.Row="1"
+                                           Grid.ColumnSpan="3"
+                                           Spacing="4"
+                                           Padding="0,4,0,0"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Start">
+                        <CheckBox IsChecked="{Binding Vegetarian}" />
+                        <Label Text="Vejetaryen" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
                 </Grid>
 
                 <HorizontalStackLayout Spacing="12" HorizontalOptions="FillAndExpand">
