@@ -23,18 +23,4 @@ public class UserService : IUserService
         return res.IsSuccessStatusCode;
     }
 
-    public async Task<string?> UploadPhotoAsync(Stream photo)
-    {
-        using var content = new MultipartFormDataContent();
-        content.Add(new StreamContent(photo), "photo", "photo.jpg");
-        var res = await _api.PostAsync("/api/users/me/photo", content);
-        if (!res.IsSuccessStatusCode) return null;
-        var dto = await res.Content.ReadFromJsonAsync<UploadPhotoResponse>();
-        return dto?.url;
-    }
-
-    private sealed class UploadPhotoResponse
-    {
-        public string url { get; set; } = null!;
-    }
 }

@@ -34,38 +34,11 @@ public partial class ProfileViewModel : BaseViewModel
 
     [ObservableProperty] private string? userName;
     [ObservableProperty] private string? email;
-    [ObservableProperty] private string? photoUrl;
     [ObservableProperty] private string? searchText;
 
     partial void OnSearchTextChanged(string? value) => ApplySearchFilter();
 
-    [RelayCommand]
-    private async Task SelectPhoto()
-    {
-        await Guard(async () =>
-        {
-            FileResult? file = null;
-            try
-            {
-                file = await MediaPicker.Default.PickPhotoAsync();
-            }
-            catch (FeatureNotSupportedException)
-            {
-                file = await FilePicker.Default.PickAsync(new PickOptions
-                {
-                    FileTypes = FilePickerFileType.Images,
-                    PickerTitle = "Fotoğraf Seç"
-                });
-            }
 
-            if (file != null)
-            {
-                using var stream = await file.OpenReadAsync();
-                var url = await _users.UploadPhotoAsync(stream);
-                if (url != null) PhotoUrl = url;
-            }
-        });
-    }
 
     [RelayCommand]
     public async Task Load()
@@ -77,7 +50,6 @@ public partial class ProfileViewModel : BaseViewModel
             {
                 UserName = profile.UserName;
                 Email = profile.Email;
-                PhotoUrl = profile.PhotoUrl;
             }
             var list = await _recipes.GetMineAsync();
             _allRecipes.Clear();
@@ -103,7 +75,7 @@ public partial class ProfileViewModel : BaseViewModel
             if (!new EmailAddressAttribute().IsValid(Email))
                 throw new Exception("Geçerli bir email adresi giriniz.");
 
-            var profile = new UserProfile { UserName = UserName, Email = Email, PhotoUrl = PhotoUrl };
+            var profile = new UserProfile { UserName = UserName, Email = Email };
             await _users.UpdateProfileAsync(profile);
         });
     }
