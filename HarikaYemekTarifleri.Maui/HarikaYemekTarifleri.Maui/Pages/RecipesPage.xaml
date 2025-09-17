@@ -11,7 +11,9 @@
               Padding="0,0,8,0"
               ColumnSpacing="8"
               VerticalOptions="Center"
-              HorizontalOptions="FillAndExpand">
+              HorizontalOptions="FillAndExpand"
+              WidthRequest="{Binding Source={x:Reference page}, Path=Width}"
+              MinimumWidthRequest="{Binding Source={x:Reference page}, Path=Width}">
             <Label Text="Tarifler"
                    FontAttributes="Bold"
                    FontSize="20"
