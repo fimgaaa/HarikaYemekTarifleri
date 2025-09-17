@@ -3,7 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HarikaYemekTarifleri.Maui.Pages.ProfilePage"
              x:Name="page"
-             Title="Profil">
+            Title="Profil">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="logout.png"
+                     Order="Primary"
+                     Priority="0"
+                     Command="{Binding LogoutCommand}" />
+    </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
         <Style x:Key="OutlinedImageButtonStyle"
@@ -49,12 +56,22 @@
                    Padding="16"
                    HasShadow="True"
                    CornerRadius="12">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="Şifre İşlemleri"
-                           FontAttributes="Bold"
-                           FontSize="18" />
-                    <Button Text="Şifre Değiştir" Command="{Binding ChangePasswordCommand}" />
-                </VerticalStackLayout>
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <VerticalStackLayout Grid.Column="0"
+                                          Spacing="12">
+                        <Label Text="Şifre İşlemleri"
+                               FontAttributes="Bold"
+                               FontSize="18" />
+                        <Button Text="Şifre Değiştir"
+                                Command="{Binding ChangePasswordCommand}" />
+                    </VerticalStackLayout>
+
+                </Grid>
             </Frame>
 
             <Frame Grid.Row="1"

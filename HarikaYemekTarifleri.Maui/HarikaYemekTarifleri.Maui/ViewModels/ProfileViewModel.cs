@@ -18,14 +18,16 @@ public partial class ProfileViewModel : BaseViewModel
     //public ProfileViewModel(IUserService users) => _users = users;
     private readonly IRecipeService _recipes;
     private readonly INavigationService _navigation;
+    private readonly IAuthService _auth;
     private readonly List<RecipeListItem> _allRecipes = new();
 
 
-    public ProfileViewModel(IUserService users, IRecipeService recipes, INavigationService navigation)
+    public ProfileViewModel(IUserService users, IRecipeService recipes, INavigationService navigation, IAuthService auth)
     {
         _users = users;
         _recipes = recipes;
         _navigation = navigation;
+        _auth = auth;
     }
 
     public ObservableCollection<RecipeListItem> Recipes { get; } = new();
@@ -161,6 +163,17 @@ public partial class ProfileViewModel : BaseViewModel
         //});
         var page = ServiceHelper.Get<ChangePasswordPage>();
         await _navigation.PushAsync(page);
+    }
+
+    [RelayCommand]
+    private async Task Logout()
+    {
+        await Guard(async () =>
+        {
+            await _auth.LogoutAsync();
+            await Application.Current!.MainPage!.DisplayAlert("Başarılı", "Çıkış yapıldı", "Tamam");
+            await Application.Current!.MainPage!.Navigation.PopToRootAsync();
+        });
     }
 
     private void ApplySearchFilter()
