@@ -26,10 +26,9 @@
                 <Label Text="Hazırlık Süresi:" VerticalOptions="Center" />
                 <TimePicker Time="{Binding PrepTime}" Format="HH:mm" />
             </HorizontalStackLayout>
-            <DatePicker Date="{Binding PublishDate}" />
 
 
-			<Label Text="Kategoriler" FontAttributes="Bold" />
+            <Label Text="Kategoriler" FontAttributes="Bold" />
 			<CollectionView ItemsSource="{Binding Categories}">
 				<CollectionView.ItemTemplate>
 					<DataTemplate>

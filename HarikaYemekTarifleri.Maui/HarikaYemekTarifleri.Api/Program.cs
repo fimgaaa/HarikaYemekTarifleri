@@ -36,8 +36,6 @@ using System.Text.Json.Serialization;
 
 using HarikaYemekTarifleri.Api.Data;    // AppDbContext
 using HarikaYemekTarifleri.Api.Models;  // AppUser, Recipe, Category, Comment, RecipeCategory
-using System.IO;
-using Azure.Core;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -133,7 +131,6 @@ auth.MapPost("/register", async (AppDbContext db, AppUser dto) =>
         //PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash)
         PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash),
         Email = dto.Email,
-        PhotoUrl = dto.PhotoUrl
     };
     db.Users.Add(user);
     await db.SaveChangesAsync();
@@ -195,7 +192,6 @@ users.MapGet("/me", async (AppDbContext db, ClaimsPrincipal u) =>
     {
         UserName = entity.UserName,
         Email = entity.Email,
-        PhotoUrl = entity.PhotoUrl
     };
     return Results.Ok(dto);
 });
@@ -222,32 +218,10 @@ users.MapPut("/me", async (AppDbContext db, ClaimsPrincipal u, UserProfileDto dt
         entity.Email = dto.Email;
     }
 
-    entity.PhotoUrl = dto.PhotoUrl ?? entity.PhotoUrl;
     await db.SaveChangesAsync();
     return Results.NoContent();
 });
 
-users.MapPost("/me/photo", async (AppDbContext db, ClaimsPrincipal u, IFormFile photo, IWebHostEnvironment env, HttpRequest request) =>
-{
-    var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
-    var entity = await db.Users.FindAsync(id);
-    if (entity is null) return Results.NotFound();
-    if (photo is null || photo.Length == 0) return Results.BadRequest();
-
-    var uploads = Path.Combine(env.WebRootPath ?? "wwwroot", "photos");
-    Directory.CreateDirectory(uploads);
-    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(photo.FileName)}";
-    var filePath = Path.Combine(uploads, fileName);
-    await using (var stream = new FileStream(filePath, FileMode.Create))
-    {
-        await photo.CopyToAsync(stream);
-    }
-    //var url = $"/photos/{fileName}";
-    var url = $"{request.Scheme}://{request.Host}/photos/{fileName}";
-    entity.PhotoUrl = url;
-    await db.SaveChangesAsync();
-    return Results.Ok(new { url });
-});
 
 
 /* =======================================
