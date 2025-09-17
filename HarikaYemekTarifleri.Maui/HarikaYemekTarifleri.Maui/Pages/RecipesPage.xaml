@@ -22,13 +22,7 @@
             <HorizontalStackLayout Grid.Column="1"
                                     HorizontalOptions="End"
                                     Spacing="8">
-                <ImageButton Source="logout.png"
-                              Command="{Binding LogoutCommand}"
-                              BackgroundColor="Transparent"
-                              HeightRequest="25"
-                              WidthRequest="25"
-                              Padding="0"
-                              VerticalOptions="Center" />
+
                 <ImageButton Source="profile.png"
                               Command="{Binding ProfileCommand}"
                               BackgroundColor="Transparent"
@@ -36,6 +30,14 @@
                               WidthRequest="40"
                               Padding="0"
                               VerticalOptions="Center" />
+                <ImageButton Source="logout.png"
+                              Command="{Binding LogoutCommand}"
+                              BackgroundColor="Transparent"
+                              HeightRequest="25"
+                              WidthRequest="25"
+                              Padding="0"
+                              VerticalOptions="Center" />
+
             </HorizontalStackLayout>
         </Grid>
     </controls:NavigationPage.TitleView>
