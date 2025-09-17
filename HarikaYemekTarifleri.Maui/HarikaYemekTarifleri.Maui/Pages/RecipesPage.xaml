@@ -7,10 +7,17 @@
 
     
     <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="profile.png"
-                     Order="Primary"
-                     Priority="0"
+        <ContentPage.TitleView>
+            <Grid Padding="0,0,12,0">
+                <ImageButton Source="profile.png"
+                     WidthRequest="40"
+                     HeightRequest="40"
+                     BackgroundColor="Transparent"
+                     HorizontalOptions="End"
                      Command="{Binding ProfileCommand}" />
+            </Grid>
+        </ContentPage.TitleView>
+
         <ToolbarItem IconImageSource="logout.png"
                      Order="Primary"
                      Priority="1"
