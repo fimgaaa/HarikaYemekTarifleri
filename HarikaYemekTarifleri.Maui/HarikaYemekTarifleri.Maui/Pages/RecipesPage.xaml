@@ -25,8 +25,8 @@
                 <ImageButton Source="logout.png"
                               Command="{Binding LogoutCommand}"
                               BackgroundColor="Transparent"
-                              HeightRequest="40"
-                              WidthRequest="40"
+                              HeightRequest="25"
+                              WidthRequest="25"
                               Padding="0"
                               VerticalOptions="Center" />
                 <ImageButton Source="profile.png"
