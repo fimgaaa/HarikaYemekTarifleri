@@ -7,8 +7,9 @@
              Title="Tarifler">
 
     <controls:NavigationPage.TitleView>
-        <Grid ColumnDefinitions="*,Auto"
+        <Grid ColumnDefinitions="*,Auto,Auto"
               Padding="0,0,8,0"
+              ColumnSpacing="8"
               VerticalOptions="Center"
               HorizontalOptions="FillAndExpand">
             <Label Text="Tarifler"
@@ -17,24 +18,33 @@
                    VerticalOptions="Center"
                    HorizontalOptions="Start" />
             <ImageButton Grid.Column="1"
+                          Source="logout.png"
+                         Command="{Binding LogoutCommand}"
+                         BackgroundColor="Transparent"
+                         HeightRequest="40"
+                         WidthRequest="40"
+                         Padding="0"
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center" />
+            <ImageButton Grid.Column="2"
                          Source="profile.png"
                          Command="{Binding ProfileCommand}"
                          BackgroundColor="Transparent"
                          HeightRequest="40"
                          WidthRequest="40"
                          Padding="0"
-                         HorizontalOptions="EndAndExpand"
+                         HorizontalOptions="End"
                          VerticalOptions="Center" />
         </Grid>
     </controls:NavigationPage.TitleView>
 
-    <ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
 
         <ToolbarItem IconImageSource="logout.png"
                      Order="Primary"
                      Priority="1"
                      Command="{Binding LogoutCommand}" />
-    </ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>-->
 
     <Grid Padding="8">
         <Grid.RowDefinitions>
