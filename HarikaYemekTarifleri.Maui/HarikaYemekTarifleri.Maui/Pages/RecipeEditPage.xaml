@@ -26,6 +26,9 @@
                 <Label Text="Hazırlık Süresi:" VerticalOptions="Center" />
                 <TimePicker Time="{Binding PrepTime}" Format="HH:mm" />
             </HorizontalStackLayout>
+            <Label Text="{Binding CreatedAt, StringFormat='Oluşturulma Tarihi: {0:dd.MM.yyyy HH:mm}'}"
+                   IsVisible="{Binding HasCreatedAt}"
+                   TextColor="Gray" />
 
 
             <Label Text="Kategoriler" FontAttributes="Bold" />

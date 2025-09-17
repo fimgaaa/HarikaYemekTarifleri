@@ -27,6 +27,14 @@ public partial class RecipeEditViewModel : BaseViewModel
     [ObservableProperty] private bool isVegetarian;
     [ObservableProperty] private Difficulty difficulty = Difficulty.Easy;
     [ObservableProperty] private TimeSpan prepTime = TimeSpan.FromMinutes(30);
+    [ObservableProperty] private DateTime? createdAt;
+
+    public bool HasCreatedAt => CreatedAt.HasValue;
+
+    partial void OnCreatedAtChanged(DateTime? value)
+    {
+        OnPropertyChanged(nameof(HasCreatedAt));
+    }
 
     [ObservableProperty] private string? photoUrl;
     public ObservableCollection<int> SelectedCategoryIds { get; } = new();
@@ -55,6 +63,7 @@ public partial class RecipeEditViewModel : BaseViewModel
         Categories.Clear();
         foreach (var c in all) Categories.Add(c);
         SelectedDifficulty = DifficultyOptions.FirstOrDefault(o => o.Value == Difficulty);
+        CreatedAt = null;
     }
 
     public async Task Init(int id)
@@ -70,6 +79,7 @@ public partial class RecipeEditViewModel : BaseViewModel
             Difficulty = recipe.Difficulty;
             SelectedDifficulty = DifficultyOptions.FirstOrDefault(o => o.Value == recipe.Difficulty);
             PrepTime = recipe.PrepTime;
+            CreatedAt = recipe.CreatedAt;
 
             PhotoUrl = recipe.PhotoUrl;
             SelectedCategoryIds.Clear();

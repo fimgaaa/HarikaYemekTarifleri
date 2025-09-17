@@ -99,7 +99,12 @@
                                             CommandParameter="{Binding .}" />
                                     </Frame.GestureRecognizers>
                                     <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
-                                        <Label Text="{Binding Title}" VerticalOptions="Center" HorizontalOptions="FillAndExpand" />
+                                        <VerticalStackLayout HorizontalOptions="FillAndExpand" Spacing="2">
+                                            <Label Text="{Binding Title}" />
+                                            <Label Text="{Binding CreatedAt, StringFormat='{0:dd.MM.yyyy HH:mm}'}"
+                                                   FontSize="12"
+                                                   TextColor="{StaticResource Gray500}" />
+                                        </VerticalStackLayout>
                                         <ImageButton Source="trash.png"
                                                      Style="{StaticResource OutlinedImageButtonStyle}"
                                                      HorizontalOptions="End"
