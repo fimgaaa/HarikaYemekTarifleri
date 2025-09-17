@@ -97,33 +97,34 @@
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical"
                                   Span="3"
-                                  HorizontalItemSpacing="12"
+                                  HorizontalItemSpacing="8"
                                   VerticalItemSpacing="12" />
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="6" Margin="4" HasShadow="True">
-                        <VerticalStackLayout Spacing="6" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Frame Padding="4" Margin="2" HasShadow="True">
+                        <VerticalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
                             <Image Source="{Binding PhotoUrl, TargetNullValue=dotnet_bot.png}"
-                                   HeightRequest="96"
-                                   WidthRequest="96"
+                                   HeightRequest="72"
+                                   WidthRequest="72"
                                    Aspect="AspectFill" />
                             <Label Text="{Binding Title}"
                                    FontAttributes="Bold"
+                                   FontSize="14"
                                    HorizontalTextAlignment="Center" />
                             <Label Text="{Binding UserName}"
-                                   FontSize="12"
+                                   FontSize="11"
                                    HorizontalTextAlignment="Center"
                                    TextColor="{StaticResource Gray600}" />
-                            <HorizontalStackLayout Spacing="12"
+                            <HorizontalStackLayout Spacing="8"
                                                    HorizontalOptions="Center"
                                                    VerticalOptions="Center">
                                 <Label Text="{Binding PrepTime}"
-                                       FontSize="12"
+                                       FontSize="11"
                                        HorizontalTextAlignment="Center" />
                                 <Label Text="{Binding Difficulty}"
-                                       FontSize="12"
+                                       FontSize="11"
                                        HorizontalTextAlignment="Center" />
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
