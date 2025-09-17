@@ -7,7 +7,7 @@
              Title="Tarifler">
 
     <controls:NavigationPage.TitleView>
-        <Grid ColumnDefinitions="*,Auto,Auto"
+        <Grid ColumnDefinitions="*,Auto"
               Padding="0,0,8,0"
               ColumnSpacing="8"
               VerticalOptions="Center"
@@ -17,24 +17,24 @@
                    FontSize="20"
                    VerticalOptions="Center"
                    HorizontalOptions="Start" />
-            <ImageButton Grid.Column="1"
-                          Source="logout.png"
-                         Command="{Binding LogoutCommand}"
-                         BackgroundColor="Transparent"
-                         HeightRequest="40"
-                         WidthRequest="40"
-                         Padding="0"
-                         HorizontalOptions="Center"
-                         VerticalOptions="Center" />
-            <ImageButton Grid.Column="2"
-                         Source="profile.png"
-                         Command="{Binding ProfileCommand}"
-                         BackgroundColor="Transparent"
-                         HeightRequest="40"
-                         WidthRequest="40"
-                         Padding="0"
-                         HorizontalOptions="End"
-                         VerticalOptions="Center" />
+            <HorizontalStackLayout Grid.Column="1"
+                                    HorizontalOptions="End"
+                                    Spacing="8">
+                <ImageButton Source="logout.png"
+                              Command="{Binding LogoutCommand}"
+                              BackgroundColor="Transparent"
+                              HeightRequest="40"
+                              WidthRequest="40"
+                              Padding="0"
+                              VerticalOptions="Center" />
+                <ImageButton Source="profile.png"
+                              Command="{Binding ProfileCommand}"
+                              BackgroundColor="Transparent"
+                              HeightRequest="40"
+                              WidthRequest="40"
+                              Padding="0"
+                              VerticalOptions="Center" />
+            </HorizontalStackLayout>
         </Grid>
     </controls:NavigationPage.TitleView>
 
