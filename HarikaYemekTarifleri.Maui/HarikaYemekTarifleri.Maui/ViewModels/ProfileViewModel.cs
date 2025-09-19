@@ -84,6 +84,10 @@ public partial class ProfileViewModel : BaseViewModel
     private async Task AddRecipe()
     {
         var page = ServiceHelper.Get<RecipeEditPage>();
+        if (page.BindingContext is RecipeEditViewModel vm)
+        {
+            await vm.PrepareForCreateAsync();
+        }
         await _navigation.PushAsync(page);
     }
 
@@ -122,17 +126,6 @@ public partial class ProfileViewModel : BaseViewModel
     [RelayCommand]
     private async Task ChangePassword()
     {
-        //await Guard(async () =>
-        //{
-        //    var oldPwd = await Application.Current!.MainPage!
-        //        .DisplayPromptAsync("Şifre Değiştir", "Mevcut şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
-        //    if (oldPwd is null) return;
-        //    var newPwd = await Application.Current!.MainPage!
-        //        .DisplayPromptAsync("Şifre Değiştir", "Yeni şifre", "Tamam", "İptal", "", -1, keyboard: Keyboard.Text, initialValue: "");
-        //    if (newPwd is null) return;
-        //    var ok = await _auth.ChangePasswordAsync(oldPwd, newPwd);
-        //    await Application.Current!.MainPage!.DisplayAlert(ok ? "Başarılı" : "Başarısız", ok ? "Şifre değiştirildi" : "Şifre değiştirilemedi", "Tamam");
-        //});
         var page = ServiceHelper.Get<ChangePasswordPage>();
         await _navigation.PushAsync(page);
     }

@@ -12,8 +12,8 @@
               ColumnSpacing="8"
               VerticalOptions="Center"
               HorizontalOptions="FillAndExpand"
-              WidthRequest="{Binding Source={x:Reference page}, Path=Width}"
-              MinimumWidthRequest="{Binding Source={x:Reference page}, Path=Width}">
+              WidthRequest="{Binding Source={x:Reference DetailPage}, Path=Width}"
+              MinimumWidthRequest="{Binding Source={x:Reference DetailPage}, Path=Width}">
             <Label Text="Tarif Detayı"
                    FontAttributes="Bold"
                    FontSize="20"

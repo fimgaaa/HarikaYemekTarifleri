@@ -1,16 +1,4 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-
-//namespace HarikaYemekTarifleri.Maui.Services
-//{
-//    internal class AuthService
-//    {
-//    }
-//}
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 file sealed class LoginResponse
@@ -54,14 +42,14 @@ public class AuthService : IAuthService
     public Task LogoutAsync()
     {
         UpdateCurrentUserFromToken(null);
-        _api.SetToken(null); // ders isterleri 12 (çıkış) – token’ı temizlemek
+        _api.SetToken(null); //token’ı temizler. API istemcisinin Bearer token’ı temizlenir; böylece sonraki istekler yetkisiz gider ve korunan endpoint’lere erişemez.
         return Task.CompletedTask;
     }
 
     public async Task<bool> ChangePasswordAsync(string oldPwd, string newPwd)
     {
         var res = await _api.PostAsync($"/auth/change-password?oldPassword={oldPwd}&newPassword={newPwd}", new { });
-        return res.IsSuccessStatusCode; // ders isterleri 13
+        return res.IsSuccessStatusCode; 
     }
 
     private void UpdateCurrentUserFromToken(string? token)

@@ -63,7 +63,24 @@ public partial class RecipeEditViewModel : BaseViewModel
         Categories.Clear();
         foreach (var c in all) Categories.Add(c);
         SelectedDifficulty = DifficultyOptions.FirstOrDefault(o => o.Value == Difficulty);
+    }
+
+    public async Task PrepareForCreateAsync()
+    {
+        _recipeId = null;
+        _photoFile = null;
+
+        Title = string.Empty;
+        Content = string.Empty;
+        IsVegetarian = false;
+        Difficulty = Difficulty.Easy;
+        PrepTime = TimeSpan.FromMinutes(30);
+        PhotoUrl = null;
         CreatedAt = null;
+
+        SelectedCategoryIds.Clear();
+
+        await Init();
     }
 
     public async Task Init(int id)

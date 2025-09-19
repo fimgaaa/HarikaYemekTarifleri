@@ -137,7 +137,7 @@ auth.MapPost("/register", async (AppDbContext db, AppUser dto) =>
     return Results.Ok();
 });
 
-// Login – İstemci { userName, password } gönderir; burada PasswordHash alanını password olarak kullanıyoruz
+
 auth.MapPost("/login", async (AppDbContext db, AppUser dto) =>
 {
     var user = await db.Users.FirstOrDefaultAsync(u => u.UserName == dto.UserName);

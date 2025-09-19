@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls;
 using HarikaYemekTarifleri.Maui.Services;
 using HarikaYemekTarifleri.Maui.Pages;
-using HarikaYemekTarifleri.Maui.Helpers; // <-- önemli
+using HarikaYemekTarifleri.Maui.Helpers; 
 
 namespace HarikaYemekTarifleri.Maui.ViewModels;
 
@@ -27,7 +27,7 @@ public partial class LoginViewModel : BaseViewModel
             var ok = await _auth.LoginAsync(UserName, Password);
             if (!ok) throw new Exception("Giriş başarısız.");
 
-            // DI'dan sayfayı al ve Navigation'a push et
+ 
             var page = ServiceHelper.Get<RecipesPage>();
             await Application.Current!.MainPage!.Navigation.PushAsync(page);
         });

@@ -21,12 +21,8 @@
         </Grid>
     </controls:NavigationPage.TitleView>
     <VerticalStackLayout Padding="24" Spacing="12">
-		<Entry Placeholder="Kullanıcı adı" Text="{Binding UserName}" />
-		<!--<Entry Placeholder="Şifre" IsPassword="True" Text="{Binding Password}" />
-		<Button Text="Giriş" Command="{Binding LoginCommand}" />
-		<Label Text="{Binding Error}" TextColor="Red" />
-	</VerticalStackLayout>-->
-		<Entry Placeholder="Şifre" IsPassword="True" Text="{Binding Password}" />
+        <Entry Placeholder="Kullanıcı adı" Text="{Binding UserName}" />
+        <Entry Placeholder="Şifre" IsPassword="True" Text="{Binding Password}" />
 		<Button Text="Giriş" Command="{Binding LoginCommand}" />
 		<Button Text="Üye Ol" Command="{Binding NavigateToRegisterCommand}" />
 		<Label Text="{Binding Error}" TextColor="Red" />
