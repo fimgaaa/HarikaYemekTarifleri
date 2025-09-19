@@ -1,16 +1,4 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-
-//namespace HarikaYemekTarifleri.Maui.Services
-//{
-//    internal class ApiClient
-//    {
-//    }
-//}
-
+﻿
 using System.Net.Http.Json;
 using System.Net.Http;
 

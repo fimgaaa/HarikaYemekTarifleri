@@ -8,7 +8,7 @@ public class Recipe : BaseEntity
     public bool IsVegetarian { get; set; }          // Checkbox filtresi (#17)
     public Difficulty Difficulty { get; set; }      // RadioButton (#17)
     public TimeSpan PrepTime { get; set; }          // TimePicker (#16)
-
+    public DateTime PublishDate { get; set; }
     public string? PhotoUrl { get; set; }
 
     public int UserId { get; set; }                 // Sahibi

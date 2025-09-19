@@ -266,6 +266,7 @@ recipes.MapGet("/", async (AppDbContext db, string? q, int? categoryId, bool? ve
             r.IsVegetarian,
             r.Difficulty,
             r.PrepTime,
+            r.PublishDate,
             r.CreatedAt,
             r.PhotoUrl,
             UserName = r.User.UserName,
@@ -291,6 +292,7 @@ recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
             r.IsVegetarian,
             r.Difficulty,
             r.PrepTime,
+            r.PublishDate,
             r.CreatedAt,
             r.PhotoUrl,
             UserName = r.User.UserName,
@@ -314,6 +316,7 @@ recipes.MapGet("/user/{userId:int}", async (AppDbContext db, int userId) =>
             r.IsVegetarian,
             r.Difficulty,
             r.PrepTime,
+            r.PublishDate,
             r.CreatedAt,
             r.PhotoUrl,
             UserName = r.User.UserName,
@@ -343,6 +346,7 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
         r.IsVegetarian,
         r.Difficulty,
         r.PrepTime,
+        r.PublishDate,
         r.CreatedAt,
         r.UserId,
         r.PhotoUrl,
@@ -369,6 +373,7 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
         IsVegetarian = dto.IsVegetarian,
         Difficulty = dto.Difficulty,
         PrepTime = dto.PrepTime,
+        PublishDate = dto.PublishDate ?? DateTime.UtcNow,
         PhotoUrl = dto.PhotoUrl,
         UserId = uid
     };
@@ -387,6 +392,7 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
         entity.IsVegetarian,
         entity.Difficulty,
         entity.PrepTime,
+        entity.PublishDate,
         entity.CreatedAt,
         entity.PhotoUrl,
         CategoryIds = dto.CategoryIds
@@ -422,6 +428,8 @@ recipes.MapPut("/{recipeId:int}", async (AppDbContext db, ClaimsPrincipal user, 
     r.IsVegetarian = dto.IsVegetarian;
     r.Difficulty = dto.Difficulty;
     r.PrepTime = dto.PrepTime;
+    if (dto.PublishDate.HasValue)
+        r.PublishDate = dto.PublishDate.Value;
     r.PhotoUrl = dto.PhotoUrl ?? r.PhotoUrl;
 
     r.RecipeCategories.Clear();

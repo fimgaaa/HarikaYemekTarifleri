@@ -18,13 +18,11 @@ public class RecipeService : IRecipeService
         if (categoryId.HasValue) qs.Add($"categoryId={categoryId.Value}");
         if (vegetarian.HasValue) qs.Add($"vegetarian={vegetarian.Value.ToString().ToLower()}");
         if (difficulty.HasValue) qs.Add($"difficulty={(int)difficulty.Value}");
-        //if (fromDate.HasValue) qs.Add($"fromDate={fromDate.Value:yyyy-MM-dd}");
         if (maxPrep.HasValue) qs.Add($"maxPrep={maxPrep.Value:c}");
         var url = "/api/recipes" + (qs.Count > 0 ? "?" + string.Join("&", qs) : "");
 
         var res = await _api.GetAsync(url);
         res.EnsureSuccessStatusCode();
-        //return await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
         var list = await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
         return list;
     }
@@ -32,7 +30,6 @@ public class RecipeService : IRecipeService
     {
         var res = await _api.GetAsync("/api/recipes/mine");
         res.EnsureSuccessStatusCode();
-        //return await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
         var list = await res.Content.ReadFromJsonAsync<IEnumerable<RecipeListItem>>() ?? [];
         return list;
     }
