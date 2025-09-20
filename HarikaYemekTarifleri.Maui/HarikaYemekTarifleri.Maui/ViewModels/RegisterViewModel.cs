@@ -28,11 +28,7 @@ public partial class RegisterViewModel : BaseViewModel
             if (Password != ConfirmPassword)
                 throw new Exception("Şifreler uyuşmuyor.");
 
-            if (Password.Length < 8)
-                throw new Exception("Şifre en az 8 karakter olmalıdır.");
-
-            if (!Password.Any(char.IsLower) || !Password.Any(char.IsUpper) || !Password.Any(char.IsDigit))
-                throw new Exception("Şifre en az bir küçük harf, bir büyük harf ve bir rakam içermelidir.");
+            EnsurePasswordComplexity(Password);
 
             var ok = await _auth.RegisterAsync(UserName, Password, Email);
             if (!ok) throw new Exception("Kayıt başarısız.");

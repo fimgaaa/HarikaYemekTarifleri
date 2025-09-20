@@ -14,4 +14,16 @@ public partial class BaseViewModel : ObservableObject
         finally { IsBusy = false; }
         await Task.CompletedTask;
     }
+    protected static void EnsurePasswordComplexity(string password)
+    {
+        if (password.Length < 8)
+        {
+            throw new InvalidOperationException("Şifre en az 8 karakter olmalıdır.");
+        }
+
+        if (!password.Any(char.IsLower) || !password.Any(char.IsUpper) || !password.Any(char.IsDigit))
+        {
+            throw new InvalidOperationException("Şifre en az bir küçük harf, bir büyük harf ve bir rakam içermelidir.");
+        }
+    }
 }

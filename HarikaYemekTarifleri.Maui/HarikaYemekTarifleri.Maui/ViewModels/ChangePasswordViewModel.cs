@@ -42,6 +42,7 @@ public partial class ChangePasswordViewModel : BaseViewModel
                 throw new InvalidOperationException("Yeni şifre mevcut şifre ile aynı olamaz.");
             }
 
+            EnsurePasswordComplexity(NewPassword!);
             var ok = await _auth.ChangePasswordAsync(OldPassword!, NewPassword!);
             await Application.Current!.MainPage!.DisplayAlert(ok ? "Başarılı" : "Başarısız",
                 ok ? "Şifre değiştirildi" : "Şifre değiştirilemedi", "Tamam");
