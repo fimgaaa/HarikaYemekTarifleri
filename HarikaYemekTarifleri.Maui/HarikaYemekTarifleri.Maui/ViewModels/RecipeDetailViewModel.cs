@@ -25,9 +25,9 @@ public partial class RecipeDetailViewModel : BaseViewModel
 
     [ObservableProperty]
     private string? newComment;
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(EditCommand))]
-    private bool isOwner;
+    //[ObservableProperty]
+    //[NotifyCanExecuteChangedFor(nameof(EditCommand))]
+    //private bool isOwner;
     private int _recipeId;
 
     public RecipeDetailViewModel(IRecipeService recipes, ICommentService comments, INavigationService navigation, IAuthService auth)
@@ -41,7 +41,7 @@ public partial class RecipeDetailViewModel : BaseViewModel
     public async Task Load(int id)
     {
         _recipeId = id;
-        IsOwner = false;
+        //IsOwner = false;
         await Guard(async () =>
         {
             var detail = await _recipes.GetAsync(id);
@@ -112,35 +112,36 @@ public partial class RecipeDetailViewModel : BaseViewModel
         });
     }
 
-    partial void OnRecipeChanged(RecipeDetail? value)
-    {
-        if (value is null)
-        {
-            IsOwner = false;
-            return;
-        }
+    //partial void OnRecipeChanged(RecipeDetail? value)
+    //{
+    //    if (value is null)
+    //    {
+    //        IsOwner = false;
+    //        return;
+    //    }
 
-        var owns = false;
-        var currentUserId = _auth.CurrentUserId;
-        if (currentUserId.HasValue)
-        {
-            owns = value.UserId == currentUserId.Value;
-        }
+    //    var owns = false;
+    //    var currentUserId = _auth.CurrentUserId;
+    //    if (currentUserId.HasValue)
+    //    {
+    //        owns = value.UserId == currentUserId.Value;
+    //    }
 
-        if (!owns)
-        {
-            var currentUserName = _auth.CurrentUserName;
-            if (!string.IsNullOrWhiteSpace(currentUserName) &&
-                !string.IsNullOrWhiteSpace(value.CreatedBy))
-            {
-                owns = string.Equals(value.CreatedBy, currentUserName, StringComparison.OrdinalIgnoreCase);
-            }
-        }
+    //    if (!owns)
+    //    {
+    //        var currentUserName = _auth.CurrentUserName;
+    //        if (!string.IsNullOrWhiteSpace(currentUserName) &&
+    //            !string.IsNullOrWhiteSpace(value.CreatedBy))
+    //        {
+    //            owns = string.Equals(value.CreatedBy, currentUserName, StringComparison.OrdinalIgnoreCase);
+    //        }
+    //    }
 
-        IsOwner = owns;
-    }
+    //    IsOwner = owns;
+    //}
 
-    [RelayCommand(CanExecute = nameof(CanEdit))]
+    //[RelayCommand(CanExecute = nameof(CanEdit))]
+    [RelayCommand]
     private async Task Edit()
     {
         var page = ServiceHelper.Get<RecipeEditPage>();
@@ -151,7 +152,7 @@ public partial class RecipeDetailViewModel : BaseViewModel
         await _navigation.PushAsync(page);
     }
 
-    private bool CanEdit() => IsOwner;
+    //private bool CanEdit() => IsOwner;
 
     [RelayCommand]
     private async Task OpenRecipe(RecipeListItem item)

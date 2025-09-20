@@ -26,43 +26,45 @@ public partial class RecipeDetailPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _vm.PropertyChanged += OnViewModelPropertyChanged;
+        //_vm.PropertyChanged += OnViewModelPropertyChanged;
         UpdateEditToolbarItem();
     }
 
     protected override void OnDisappearing()
     {
-        _vm.PropertyChanged -= OnViewModelPropertyChanged;
+        //_vm.PropertyChanged -= OnViewModelPropertyChanged;
         base.OnDisappearing();
     }
 
-    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(RecipeDetailViewModel.IsOwner))
-        {
-            if (Dispatcher?.IsDispatchRequired ?? false)
-            {
-                Dispatcher.Dispatch(UpdateEditToolbarItem);
-            }
-            else
-            {
-                UpdateEditToolbarItem();
-            }
-        }
-    }
+    //private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    //{
+    //    if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(RecipeDetailViewModel.IsOwner))
+    //    {
+    //        if (Dispatcher?.IsDispatchRequired ?? false)
+    //        {
+    //            Dispatcher.Dispatch(UpdateEditToolbarItem);
+    //        }
+    //        else
+    //        {
+    //            UpdateEditToolbarItem();
+    //        }
+    //    }
+    //}
 
     private void UpdateEditToolbarItem()
     {
-        if (_vm.IsOwner)
+        //if (_vm.IsOwner)
+        //{
+        //    if (!ToolbarItems.Contains(_editToolbarItem))
+        //    {
+        //        ToolbarItems.Add(_editToolbarItem);
+        //    }
+        //}
+        //else if (ToolbarItems.Contains(_editToolbarItem))
+        if (!ToolbarItems.Contains(_editToolbarItem))
         {
-            if (!ToolbarItems.Contains(_editToolbarItem))
-            {
-                ToolbarItems.Add(_editToolbarItem);
-            }
-        }
-        else if (ToolbarItems.Contains(_editToolbarItem))
-        {
-            ToolbarItems.Remove(_editToolbarItem);
+            ToolbarItems.Add(_editToolbarItem);
+            //ToolbarItems.Remove(_editToolbarItem);
         }
     }
 }
