@@ -357,7 +357,6 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
         .Include(x => x.Comments)
         .Include(x => x.User)
         .FirstOrDefaultAsync(x => x.Id == id);
-    //return r is null ? Results.NotFound() : Results.Ok(r);
     if (r is null) return Results.NotFound();
 
     var dto = new
@@ -538,7 +537,9 @@ recipes.MapDelete("/{id:int}", async (AppDbContext db, ClaimsPrincipal u, int id
     if (r is null) return Results.NotFound();
 
     var ownsRecipe = userId.HasValue && r.UserId == userId.Value;
-    var createdByMatches = r.UserId == 0 && !string.IsNullOrEmpty(userName) && r.CreatedBy == userName;
+    var createdByMatches = r.UserId == 0 &&
+        !string.IsNullOrEmpty(userName) &&
+        string.Equals(r.CreatedBy, userName, StringComparison.OrdinalIgnoreCase);
     if (!ownsRecipe && !createdByMatches)
         return Results.Forbid();
     db.Remove(r);
