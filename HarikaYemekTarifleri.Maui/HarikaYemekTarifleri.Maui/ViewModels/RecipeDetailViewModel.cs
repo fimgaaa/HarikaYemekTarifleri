@@ -74,6 +74,7 @@ public partial class RecipeDetailViewModel : BaseViewModel
     {
         if (string.IsNullOrWhiteSpace(NewComment))
         {
+            Error = "Yorum boş olamaz.";
             return;
         }
         await Guard(async () =>

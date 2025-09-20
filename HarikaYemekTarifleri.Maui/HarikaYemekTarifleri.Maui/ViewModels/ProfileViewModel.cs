@@ -61,9 +61,6 @@ public partial class ProfileViewModel : BaseViewModel
     [RelayCommand]
     public async Task Save()
     {
-        ////var profile = new UserProfile { UserName = UserName, Email = Email };
-        //var profile = new UserProfile { UserName = UserName, Email = Email, PhotoUrl = PhotoUrl };
-        //await Guard(async () => await _users.UpdateProfileAsync(profile));
         await Guard(async () =>
         {
             if (string.IsNullOrWhiteSpace(UserName))

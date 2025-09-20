@@ -27,9 +27,28 @@ public partial class ChangePasswordViewModel : BaseViewModel
     {
         await Guard(async () =>
         {
+            if (string.IsNullOrWhiteSpace(OldPassword))
+            {
+                throw new InvalidOperationException("Lütfen mevcut şifrenizi girin.");
+            }
+
+            if (string.IsNullOrWhiteSpace(NewPassword))
+            {
+                throw new InvalidOperationException("Lütfen yeni şifrenizi girin.");
+            }
+
+            if (OldPassword == NewPassword)
+            {
+                throw new InvalidOperationException("Yeni şifre mevcut şifre ile aynı olamaz.");
+            }
+
             var ok = await _auth.ChangePasswordAsync(OldPassword!, NewPassword!);
             await Application.Current!.MainPage!.DisplayAlert(ok ? "Başarılı" : "Başarısız",
                 ok ? "Şifre değiştirildi" : "Şifre değiştirilemedi", "Tamam");
+            if (!ok)
+            {
+                Error = "Şifre değiştirilemedi";
+            }
             if (ok)
             {
                 await _navigation.PopAsync();
