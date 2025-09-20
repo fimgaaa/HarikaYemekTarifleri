@@ -34,8 +34,8 @@ using HarikaYemekTarifleri.Api.DTOs;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 
-using HarikaYemekTarifleri.Api.Data;    // AppDbContext
-using HarikaYemekTarifleri.Api.Models;  // AppUser, Recipe, Category, Comment, RecipeCategory
+using HarikaYemekTarifleri.Api.Data; 
+using HarikaYemekTarifleri.Api.Models;  
 using System.ComponentModel.DataAnnotations;
 
 
@@ -62,7 +62,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 
-// DbContext + HttpContextAccessor (audit için gerekli)
+// DbContext + HttpContextAccessor (audit(Bir sistemde kim, ne zaman, hangi işlemi yaptı bilgisini kaydetme) için gerekli)
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));

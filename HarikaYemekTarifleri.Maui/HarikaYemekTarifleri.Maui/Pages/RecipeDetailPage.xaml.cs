@@ -16,7 +16,10 @@ public partial class RecipeDetailPage : ContentPage
         _editToolbarItem = new ToolbarItem
         {
             Text = "Düzenle",
-            BindingContext = vm
+            BindingContext = vm,
+            Order = ToolbarItemOrder.Primary,
+            Priority = 0,
+            IconImageSource = ImageSource.FromFile("trash.png")
         };
         _editToolbarItem.SetBinding(ToolbarItem.CommandProperty, nameof(RecipeDetailViewModel.EditCommand));
 
