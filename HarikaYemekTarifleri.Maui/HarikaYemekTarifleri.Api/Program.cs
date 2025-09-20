@@ -355,6 +355,7 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
     var r = await db.Recipes
         .Include(x => x.RecipeCategories).ThenInclude(rc => rc.Category)
         .Include(x => x.Comments)
+        .Include(x => x.User)
         .FirstOrDefaultAsync(x => x.Id == id);
     //return r is null ? Results.NotFound() : Results.Ok(r);
     if (r is null) return Results.NotFound();
@@ -370,6 +371,7 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
         r.PublishDate,
         r.CreatedAt,
         r.UserId,
+        CreatedBy = r.User?.UserName ?? r.CreatedBy,
         r.PhotoUrl,
         Categories = r.RecipeCategories.Select(rc => rc.Category.Name),
         Comments = r.Comments.Select(c => new CommentDto { Id = c.Id, CreatedBy = c.CreatedBy, Text = c.Text })

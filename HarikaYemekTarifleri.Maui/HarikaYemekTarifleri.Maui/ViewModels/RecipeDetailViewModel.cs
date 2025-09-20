@@ -120,9 +120,20 @@ public partial class RecipeDetailViewModel : BaseViewModel
         }
 
         var owns = false;
-        if (_auth.CurrentUserId.HasValue)
+        var currentUserId = _auth.CurrentUserId;
+        if (currentUserId.HasValue)
         {
-            owns = value.UserId == _auth.CurrentUserId.Value;
+            owns = value.UserId == currentUserId.Value;
+        }
+
+        if (!owns)
+        {
+            var currentUserName = _auth.CurrentUserName;
+            if (!string.IsNullOrWhiteSpace(currentUserName) &&
+                !string.IsNullOrWhiteSpace(value.CreatedBy))
+            {
+                owns = string.Equals(value.CreatedBy, currentUserName, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         IsOwner = owns;

@@ -19,6 +19,7 @@ public class RecipeDetail
     public DateTime CreatedAt { get; set; }
     public List<string> Categories { get; set; } = new();
     public int UserId { get; set; }
+    public string? CreatedBy { get; set; }
     //public List<string> Comments { get; set; } = new();
     public string? PhotoUrl { get; set; }
     public List<CommentDto> Comments { get; set; } = new();
