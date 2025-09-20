@@ -7,7 +7,7 @@
              Title="Tarif Detayı">
 
     <controls:NavigationPage.TitleView>
-        <Grid ColumnDefinitions="*"
+		<Grid ColumnDefinitions="*,Auto"
               Padding="0,0,8,0"
               ColumnSpacing="8"
               VerticalOptions="Center"
@@ -19,6 +19,12 @@
                    FontSize="20"
                    VerticalOptions="Center"
                    HorizontalOptions="Start" />
+			<Button Text="Düzenle"
+		        Command="{Binding EditCommand}"
+		        IsVisible="{Binding IsOwner}"
+		        HorizontalOptions="End"
+		        VerticalOptions="Center"
+		        Grid.Column="1" />
         </Grid>
     </controls:NavigationPage.TitleView>
     

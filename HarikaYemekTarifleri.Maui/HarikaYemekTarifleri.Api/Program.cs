@@ -126,9 +126,9 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
-/* ============================
-   AUTH ENDPOINTLERİ (/auth)
-   ============================ */
+
+  // AUTH ENDPOINTLERİ (/auth)
+
 var auth = app.MapGroup("/auth");
 
 // Register
@@ -143,7 +143,6 @@ auth.MapPost("/register", async (AppDbContext db, AppUser dto) =>
     var user = new AppUser
     {
         UserName = dto.UserName,
-        //PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash)
         PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.PasswordHash),
         Email = dto.Email,
     };
@@ -193,9 +192,9 @@ auth.MapPost("/change-password", async (AppDbContext db, ClaimsPrincipal user, s
     return Results.Ok();
 }).RequireAuthorization();
 
-/* ======================
-   KULLANICI PROFİLİ
-   ====================== */
+
+//Kullanıcı Profili
+
 var users = app.MapGroup("/api/users").RequireAuthorization();
 
 users.MapGet("/me", async (AppDbContext db, ClaimsPrincipal u) =>
@@ -237,9 +236,9 @@ users.MapPut("/me", async (AppDbContext db, ClaimsPrincipal u, UserProfileDto dt
 
 
 
-/* =======================================
-   TARİF / KATEGORİ / YORUM ENDPOINTLERİ
-   ======================================= */
+
+   //Tarif / KAtegori / Yorum ENDPOINTLERİ
+
 
 // Tarifler
 var recipes = app.MapGroup("/api/recipes").RequireAuthorization();
@@ -374,7 +373,7 @@ recipes.MapGet("/{id:int}", async (AppDbContext db, int id) =>
 });
 
 // POST /api/recipes
-//recipes.MapPost("/", async (AppDbContext db, ClaimsPrincipal user, RecipeCreateDto dto) =>
+
 recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipal user) =>
 {
     if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
@@ -401,7 +400,7 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
 
     db.Recipes.Add(entity);
     await db.SaveChangesAsync();
-    //return Results.Created($"/api/recipes/{entity.Id}", entity);
+
     return Results.Created($"/api/recipes/{entity.Id}",
     new
     {
@@ -418,7 +417,7 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
 });
 
 // PUT /api/recipes/{id}
-/*recipes.MapPut("/{id:int}", async (AppDbContext db, int id,  RecipeUpdateDto dto)*/
+
 recipes.MapPut("/{recipeId:int}", async (AppDbContext db, ClaimsPrincipal user, int recipeId, RecipeUpdateDto dto) =>
 {
     var r = await db.Recipes.Include(x => x.RecipeCategories)
@@ -481,41 +480,6 @@ recipes.MapPost("/{id:int}/photo", async (AppDbContext db, int id, IFormFile pho
     return Results.Ok(new { url });
 });
 
-//recipes.MapPost("/", async (AppDbContext db, ClaimsPrincipal user, Recipe dto, int[] categoryIds) =>
-//{
-//    if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
-//        return Results.BadRequest("Başlık ve içerik boş olamaz.");
-
-//    var uid = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
-//    dto.UserId = uid;
-
-//    foreach (var cid in categoryIds.Distinct())
-//        dto.RecipeCategories.Add(new RecipeCategory { CategoryId = cid });
-
-//    db.Recipes.Add(dto);
-//    await db.SaveChangesAsync();
-//    return Results.Created($"/api/recipes/{dto.Id}", dto);
-//});
-
-//recipes.MapPut("/{id:int}", async (AppDbContext db, int id, Recipe dto, int[] categoryIds) =>
-//{
-//    var r = await db.Recipes.Include(x => x.RecipeCategories).FirstOrDefaultAsync(x => x.Id == id);
-//    if (r is null) return Results.NotFound();
-
-//    r.Title = dto.Title;
-//    r.Content = dto.Content;
-//    r.IsVegetarian = dto.IsVegetarian;
-//    r.Difficulty = dto.Difficulty;
-//    r.PrepTime = dto.PrepTime;
-//    r.PublishDate = dto.PublishDate;
-
-//    r.RecipeCategories.Clear();
-//    foreach (var cid in categoryIds.Distinct())
-//        r.RecipeCategories.Add(new RecipeCategory { RecipeId = r.Id, CategoryId = cid });
-
-//    await db.SaveChangesAsync();
-//    return Results.NoContent();
-//});
 
 recipes.MapDelete("/{id:int}", async (AppDbContext db, ClaimsPrincipal u, int id) =>
 {
@@ -559,7 +523,6 @@ comments.MapPost("/", async (AppDbContext db, ClaimsPrincipal u, int recipeId, s
     var c = new Comment { RecipeId = recipeId, Text = text, CreatedBy = userName, CreatedAt = DateTime.UtcNow };
     db.Comments.Add(c);
     await db.SaveChangesAsync();
-    //return Results.Ok(c);
     var dto = new CommentDto { Id = c.Id, CreatedBy = c.CreatedBy, Text = c.Text };
     return Results.Ok(dto);
 });

@@ -42,13 +42,6 @@
         </Grid>
     </controls:NavigationPage.TitleView>
 
-    <!--<ContentPage.ToolbarItems>
-
-        <ToolbarItem IconImageSource="logout.png"
-                     Order="Primary"
-                     Priority="1"
-                     Command="{Binding LogoutCommand}" />
-    </ContentPage.ToolbarItems>-->
 
     <Grid Padding="8">
         <Grid.RowDefinitions>
@@ -120,7 +113,6 @@
                 <Label Text="{Binding Error}" TextColor="Red" />
             </VerticalStackLayout>
         </Frame>
-        <!-- ÖNEMLİ: Frame burada kapanıyor -->
 
   
         <CollectionView Grid.Row="1"

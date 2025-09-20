@@ -25,9 +25,9 @@ public partial class RecipeDetailViewModel : BaseViewModel
 
     [ObservableProperty]
     private string? newComment;
-    //[ObservableProperty]
-    //[NotifyCanExecuteChangedFor(nameof(EditCommand))]
-    //private bool isOwner;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(EditCommand))]
+    private bool isOwner;
     private int _recipeId;
 
     public RecipeDetailViewModel(IRecipeService recipes, ICommentService comments, INavigationService navigation, IAuthService auth)
@@ -141,9 +141,42 @@ public partial class RecipeDetailViewModel : BaseViewModel
     //}
 
     //[RelayCommand(CanExecute = nameof(CanEdit))]
-    [RelayCommand]
+    partial void OnRecipeChanged(RecipeDetail? value)
+    {
+        if (value is null)
+        {
+            IsOwner = false;
+            return;
+        }
+
+        var owns = false;
+        var currentUserId = _auth.CurrentUserId;
+        if (currentUserId.HasValue)
+        {
+            owns = value.UserId == currentUserId.Value;
+        }
+
+        if (!owns)
+        {
+            var currentUserName = _auth.CurrentUserName;
+            if (!string.IsNullOrWhiteSpace(currentUserName) &&
+                !string.IsNullOrWhiteSpace(value.CreatedBy))
+            {
+                owns = string.Equals(value.CreatedBy, currentUserName, StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
+        IsOwner = owns;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanEdit))]
     private async Task Edit()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
+
         var page = ServiceHelper.Get<RecipeEditPage>();
         if (page.BindingContext is RecipeEditViewModel vm)
         { await vm.Init(_recipeId);
@@ -152,7 +185,7 @@ public partial class RecipeDetailViewModel : BaseViewModel
         await _navigation.PushAsync(page);
     }
 
-    //private bool CanEdit() => IsOwner;
+    private bool CanEdit() => IsOwner;
 
     [RelayCommand]
     private async Task OpenRecipe(RecipeListItem item)

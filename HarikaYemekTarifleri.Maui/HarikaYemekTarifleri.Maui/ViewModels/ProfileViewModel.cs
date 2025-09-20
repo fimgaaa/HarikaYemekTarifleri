@@ -15,7 +15,7 @@ namespace HarikaYemekTarifleri.Maui.ViewModels;
 public partial class ProfileViewModel : BaseViewModel
 {
     private readonly IUserService _users;
-    //public ProfileViewModel(IUserService users) => _users = users;
+ 
     private readonly IRecipeService _recipes;
     private readonly INavigationService _navigation;
     private readonly IAuthService _auth;

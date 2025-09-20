@@ -21,14 +21,9 @@
         </Grid>
     </controls:NavigationPage.TitleView>
     <ScrollView>
-		<VerticalStackLayout Padding="16" Spacing="10">
-			<!--<Entry Placeholder="Başlık" Text="{Binding Title}" />
-			<Editor Placeholder="İçerik" HeightRequest="120" Text="{Binding Content}" />
-			<CheckBox IsChecked="{Binding IsVegetarian}" />
-			<Label Text="Vejetaryen" />
-			<Picker Title="Zorluk" ItemsSource="{Binding Source={x:Reference page}, Path=BindingContext.DifficultyOptions}" />-->
-    
-                <Entry Placeholder="Başlık" Text="{Binding Title}" />
+        <VerticalStackLayout Padding="16" Spacing="10">
+
+            <Entry Placeholder="Başlık" Text="{Binding Title}" />
                 <Editor Placeholder="İçerik" HeightRequest="120" Text="{Binding Content}" />
                 <Image Source="{Binding PhotoUrl, TargetNullValue='dotnet_bot.png'}" HeightRequest="200" />
                 <Button Text="Fotoğraf Seç" Command="{Binding SelectPhotoCommand}" />

@@ -4,7 +4,6 @@ public enum Difficulty { Easy = 0, Medium = 1, Hard = 2 }
 
 public record RecipeListItem(
     int Id, string Title, bool IsVegetarian, Difficulty Difficulty,
-        //TimeSpan PrepTime, DateTime PublishDate, IEnumerable<string> Categories, int CommentsCount);
     TimeSpan PrepTime, DateTime CreatedAt, IEnumerable<string> Categories,
     int CommentsCount, string UserName, string? PhotoUrl);
 
