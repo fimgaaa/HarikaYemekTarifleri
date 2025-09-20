@@ -39,6 +39,21 @@ using HarikaYemekTarifleri.Api.Models;  // AppUser, Recipe, Category, Comment, R
 using System.ComponentModel.DataAnnotations;
 
 
+static string? GetUserId(ClaimsPrincipal? user)
+{
+    if (user is null) return null;
+
+    var id = user.FindFirstValue(ClaimTypes.NameIdentifier);
+    if (!string.IsNullOrWhiteSpace(id)) return id;
+
+    id = user.Claims.FirstOrDefault(c => string.Equals(c.Type, "nameid", StringComparison.OrdinalIgnoreCase))?.Value;
+    if (!string.IsNullOrWhiteSpace(id)) return id;
+
+    id = user.Claims.FirstOrDefault(c => string.Equals(c.Type, "sub", StringComparison.OrdinalIgnoreCase))?.Value;
+    return string.IsNullOrWhiteSpace(id) ? null : id;
+}
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -185,7 +200,9 @@ var users = app.MapGroup("/api/users").RequireAuthorization();
 
 users.MapGet("/me", async (AppDbContext db, ClaimsPrincipal u) =>
 {
-    var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    var idValue = GetUserId(u);
+    if (idValue is null || !int.TryParse(idValue, out var id))
+        return Results.Unauthorized();
     var entity = await db.Users.FindAsync(id);
     if (entity is null) return Results.NotFound();
     var dto = new UserProfileDto
@@ -198,7 +215,9 @@ users.MapGet("/me", async (AppDbContext db, ClaimsPrincipal u) =>
 
 users.MapPut("/me", async (AppDbContext db, ClaimsPrincipal u, UserProfileDto dto) =>
 {
-    var id = int.Parse(u.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    var idValue = GetUserId(u);
+    if (idValue is null || !int.TryParse(idValue, out var id))
+        return Results.Unauthorized();
     var entity = await db.Users.FindAsync(id);
     if (entity is null) return Results.NotFound();
     //if (string.IsNullOrWhiteSpace(dto.Email))
@@ -280,7 +299,9 @@ recipes.MapGet("/", async (AppDbContext db, string? q, int? categoryId, bool? ve
 
 recipes.MapGet("/mine", async (AppDbContext db, ClaimsPrincipal user) =>
 {
-    var uid = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    var uidValue = GetUserId(user);
+    if (uidValue is null || !int.TryParse(uidValue, out var uid))
+        return Results.Unauthorized();
     var list = await db.Recipes
         .Include(r => r.User)
         .Where(r => r.UserId == uid)
@@ -364,7 +385,9 @@ recipes.MapPost("/", async (RecipeCreateDto dto, AppDbContext db, ClaimsPrincipa
     if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
         return Results.BadRequest("Başlık ve içerik boş olamaz.");
 
-    var uid = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    var uidValue = GetUserId(user);
+    if (uidValue is null || !int.TryParse(uidValue, out var uid))
+        return Results.Unauthorized();
 
     var entity = new Recipe
     {
@@ -407,8 +430,11 @@ recipes.MapPut("/{recipeId:int}", async (AppDbContext db, ClaimsPrincipal user, 
                             .FirstOrDefaultAsync(x => x.Id == recipeId);
     if (r is null) return Results.NotFound();
 
-    var currentUserIdValue = user.FindFirstValue(ClaimTypes.NameIdentifier);
+    var currentUserIdValue = GetUserId(user);
     var currentUserName = user.Identity?.Name;
+
+    if (currentUserIdValue is null && string.IsNullOrWhiteSpace(currentUserName))
+        return Results.Unauthorized();
 
     var isOwner = false;
     if (int.TryParse(currentUserIdValue, out var currentUserId))
