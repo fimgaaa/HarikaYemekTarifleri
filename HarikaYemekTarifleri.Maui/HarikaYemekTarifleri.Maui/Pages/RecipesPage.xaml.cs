@@ -15,6 +15,6 @@ public partial class RecipesPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        if (_vm.Items.Count == 0) await _vm.Load();
+        await _vm.Load();
     }
 }
